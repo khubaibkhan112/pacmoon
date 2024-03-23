@@ -4,8 +4,9 @@ import { createApp } from 'vue';
 // import ComponentA from './components/ComponentA.vue';
 import App from '@/components/ExampleComponent.vue';
 
-const app = createApp({});
+// const app = createApp({});
 
-app.component('App', App);
+// app.component('App', App);
 
-app.mount("#app");
+// app.mount("#app");
+createApp(App).mount("#app")

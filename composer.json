@@ -7,14 +7,10 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^11.0",
-<<<<<<< HEAD
         "laravel/tinker": "^2.9",
-        "thujohn/twitter": "^1.1"
-=======
-        "laravel/socialite": "^5.12",
-        "laravel/tinker": "^2.9",
+        "thujohn/twitter": "^1.1",
+        "laravel/socialite": "^5.12",        
         "laravel/ui": "^4.5"
->>>>>>> a0efb203d5253f7f4d5006ab1c9766b230ef2b6b
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
