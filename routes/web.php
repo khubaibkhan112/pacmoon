@@ -8,6 +8,10 @@ Route::get('/', function () {
 
 Route::get('auth/twitter', 'Auth\LoginController@redirectToTwitter');
 Route::get('auth/twitter/callback', 'Auth\LoginController@handleTwitterCallback');
+Route::get('{path}', function(){
+    return view('spa');
+})->where('path', '(.*)');
+
 
 Auth::routes();
 
