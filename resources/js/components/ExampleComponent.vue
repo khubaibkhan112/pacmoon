@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header">Example Component</div>
 
-                    <div class="card-body">
+                    <div class="card-body text-success">
                         I'm an example component.
                     </div>
                 </div>

@@ -23,9 +23,6 @@ $config = [
 
 <body class="hold-transition layout-footer-fixed">
     <div id="app"></div>
-
-    <h1>We are here</h1>
-
     @vite(['resources/js/app.js'])
 
 </body>
