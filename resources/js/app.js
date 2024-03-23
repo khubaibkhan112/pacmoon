@@ -1,19 +1,11 @@
-require('./bootstrap');
+import './bootstrap';
 
-window.Vue = require('vue').default;
-//global methods file
-import './globalMethods';
+import { createApp } from 'vue';
+// import ComponentA from './components/ComponentA.vue';
+import App from '@/components/ExampleComponent.vue';
 
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
-Vue.use(DatePicker)
-Vue.component('date-picker', DatePicker)
+const app = createApp({});
 
+app.component('App', App);
 
-import './adminComponentsRegister';
-
-import './employeeComponentsRegister';
-
-const app = new Vue({
-    el: '#app',
-});
+app.mount("#app");

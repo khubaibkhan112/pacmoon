@@ -1,11 +1,11 @@
 @php
-    $config = [
-        'appName' => config('app.name'),
-        'locale' => ($locale = app()->getLocale()),
-        'locales' => config('app.locales'),
-        'githubAuth' => config('services.github.client_id'),
-        'isDemoMode' => config('app.is_demo_mode'),
-    ];
+$config = [
+'appName' => config('app.name'),
+'locale' => ($locale = app()->getLocale()),
+'locales' => config('app.locales'),
+'githubAuth' => config('services.github.client_id'),
+'isDemoMode' => config('app.is_demo_mode'),
+];
 @endphp
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
@@ -18,20 +18,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ v('/dist/css/app.css') }}">
+    @vite(['resources/sass/app.scss'])
 </head>
 
 <body class="hold-transition layout-footer-fixed">
     <div id="app"></div>
 
-    {{-- Global configuration object --}}
-    <script>
-        window.config = @json($config);
-    </script>
+    <h1>We are here</h1>
 
-    {{-- Load the application scripts --}}
-
-    <script src="{{ vite('/dist/js/app.js') }}"></script>
+    @vite(['resources/js/app.js'])
 
 </body>
 
