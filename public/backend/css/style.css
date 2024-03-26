@@ -1,0 +1,35 @@
+.menu-link.menu-toggles {
+    color: #000000 !important;
+}
+
+.menu-item>.menu-link.menu-toggles:hover {
+    color: #ffffff;
+    background: #FF7043 !important;
+
+}
+
+.menu-item>.menu-link.menu-toggles:hover .text-dark {
+    color: #ffffff !important;
+    /* Add any other styles you want for the text-dark class on hover */
+}
+
+.menu-item.open>.menu-link.menu-toggles {
+    color: #ffffff !important;
+    background: #FF7043 !important;
+}
+.bg-menu-theme .menu-inner .menu-items.open>.menu-link.menu-toggles {
+    background-color: #ff7034;
+
+
+}
+html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item:not(.active) > .menu-link:hover, .layout-menu-hover.layout-menu-collapsed .bg-menu-theme .menu-inner .menu-item:not(.active) > .menu-link:hover{
+    cursor: pointer !important;
+}
+.bg-menu-theme .menu-inner .menu-items.open>.menu-link.menu-toggles .text-dark {
+    color: #fff !important;
+}
+
+.bg-menu-theme .menu-inner .menu-items.open>.menu-link.menu-toggles:hover {
+    color: #fff !important;
+    cursor: pointer !important;
+}
