@@ -63,7 +63,8 @@ class ProfileController extends Controller
     }
     public function twitterrAcc(Request $request)
     {
-        $id=1774405752267952303;
+        // dd($this->twitter);
+        $id=1775106779103613436;
         // dd($this->twitter);
         //$status = 'This is a tweet from my Laravel app!';
         $response = $this->twitter->getTweets($id);
