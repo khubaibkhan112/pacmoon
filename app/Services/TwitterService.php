@@ -20,13 +20,14 @@ class TwitterService
         $this->accessTokenSecret = env('TWITTER_ACCESS_TOKEN_SECRET');
 
         $this->client = new Client([
-            'base_uri' => 'https://api.twitter.com/2.0/',
+            'base_uri' => 'https://api.twitter.com',
             'auth' => [$this->apiKey, $this->apiSecret, 'oauth']
         ]);
     }
 
     public function postTweet($status)
     {
+        
         $response = $this->client->post('statuses/update.json', [
             'query' => ['status' => $status]
         ]);
@@ -35,7 +36,7 @@ class TwitterService
     }
     public function getTweets($id)
     {
-        $response = $this->client->get('/tweets/'.$id);
+        $response = $this->client->get('/2/tweets/'.$id);
         return json_decode($response->getBody(), true);
     }
 }
