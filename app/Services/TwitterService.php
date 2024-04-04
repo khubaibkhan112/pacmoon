@@ -11,6 +11,7 @@ class TwitterService
     protected $apiSecret;
     protected $accessToken;
     protected $accessTokenSecret;
+    protected $bearerToken;
 
     public function __construct()
     {
@@ -18,10 +19,16 @@ class TwitterService
         $this->apiSecret = env('TWITTER_CONSUMER_SECRET');
         $this->accessToken = env('TWITTER_ACCESS_TOKEN');
         $this->accessTokenSecret = env('TWITTER_ACCESS_TOKEN_SECRET');
+        $this->bearerToken = env('TWITTER_BEARER_TOKEN');
 
         $this->client = new Client([
             'base_uri' => 'https://api.twitter.com',
-            'auth' => [$this->apiKey, $this->apiSecret, 'oauth']
+            'auth' => [$this->apiKey, $this->apiSecret, 'oauth'],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->bearerToken,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
+            ]
         ]);
     }
 
