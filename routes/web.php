@@ -19,4 +19,4 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/twitter_acc', [ProfileController::class, 'twitterrAcc']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
