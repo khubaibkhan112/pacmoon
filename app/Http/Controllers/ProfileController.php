@@ -67,7 +67,8 @@ class ProfileController extends Controller
         $id=1775106779103613436;
          //dd($this->twitter);
         //$status = 'This is a tweet from my Laravel app!';
-        $response = $this->twitter->getTweets($id);
+        // $response = $this->twitter->getTweets($id);
+        $response = $this->twitter->getuser();
     //    $tweet= new Twitter;
     //    $tweet->getTweet($id);
        dd($response);

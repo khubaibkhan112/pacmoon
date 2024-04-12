@@ -41,6 +41,13 @@ class TwitterService
 
         return json_decode($response->getBody(), true);
     }
+    public function getuser()
+    {
+        
+        $response = $this->client->get('2/users/1774872213683863552');
+
+        return json_decode($response->getBody(), true);
+    }
     public function getTweets($id)
     {
         $response = $this->client->get('/2/tweets/'.$id);
