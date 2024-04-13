@@ -74,5 +74,10 @@
           </li>
         </ul>
       </li>
+      <li class="menu-item">
+        <a href="{{route('points.index')}}" class="menu-link {{request()->segment(1)=="points" ? 'active' : ''}}">
+          <div data-i18n="Points">Points</div>
+        </a>
+      </li>
     </ul>
   </aside>
