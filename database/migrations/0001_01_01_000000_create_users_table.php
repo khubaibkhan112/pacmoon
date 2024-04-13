@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name');
+            $table->string('name');
             $table->string('email')->unique()->nullable();
             $table->string('phone')->unique()->nullable();
-            $table->string('twitter_id')->unique();
-            $table->string('twitter_token')->unique();
+            $table->string('twitter_id')->unique()->nullable();
+            $table->string('twitter_token')->unique()->nullable();
             $table->longText('profile_img')->nullable();
             $table->boolean('is_valid')->default(false);
             $table->timestamp('email_verified_at')->nullable();

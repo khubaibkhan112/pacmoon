@@ -1,4 +1,5 @@
 import './bootstrap';
+import './adminComponentsRegister';
 
 import Alpine from 'alpinejs';
 
