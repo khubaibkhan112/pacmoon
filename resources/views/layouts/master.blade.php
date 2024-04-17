@@ -1,50 +1,47 @@
 <!DOCTYPE html>
 
-<html
-  lang="en"
-  class="light-style layout-navbar-fixed layout-menu-fixed layout-compact"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../../assets/"
-  data-template="vertical-menu-template-no-customizer">
-  
-  @include('partials.head')
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default" data-assets-path="../../assets/" data-template="vertical-menu-template-no-customizer">
 
-  <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <!-- Menu -->
+@include('partials.head')
 
-        @include('partials.sidebar')
-        <!-- / Menu -->
+<body>
+  <!-- Layout wrapper -->
+  <div id="app"></div>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+      @include('partials.sidebar')
+      <!-- / Menu -->
 
-        <!-- Layout container -->
-        <div class="layout-page">
-          <!-- Navbar -->
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
 
-          @include('partials.navbar')
+        @include('partials.navbar')
 
-          <!-- / Navbar -->
+        <!-- / Navbar -->
 
-          <!-- Content wrapper -->
-          <div class="content-wrapper">
-            @section('content')
-            @show
-            @include('partials.footer')
-          </div>
-          
-          <!-- Content wrapper -->
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+
+          @vite(['resources/js/app.js'])
+          @section('content')
+          @show
+          @include('partials.footer')
         </div>
-        <!-- / Layout page -->
+
+        <!-- Content wrapper -->
       </div>
-
-      <!-- Overlay -->
-      <div class="layout-overlay layout-menu-toggle"></div>
-
-      <!-- Drag Target Area To SlideIn Menu On Small Screens -->
-      <div class="drag-target"></div>
+      <!-- / Layout page -->
     </div>
-    @include('partials.scripts')
-  </body>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="drag-target"></div>
+  </div>
+  @include('partials.scripts')
+</body>
+
 </html>

@@ -1,8 +1,13 @@
-import './bootstrap';
-import './adminComponentsRegister';
+import "./bootstrap";
 
-import Alpine from 'alpinejs';
 
-window.Alpine = Alpine;
+import { createApp } from "vue";
+import App from "./components/App.vue";
+import ExampleComponent from "./components/ExampleComponent.vue"; // Import the new component
 
-Alpine.start();
+const app = createApp(App);
+
+// Register the new component
+app.component("example-component", ExampleComponent);
+
+app.mount("#app");
