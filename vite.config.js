@@ -12,10 +12,9 @@ export default defineConfig({
             refresh: true,
         }),
         vue({
-            template: {
-                transformAssetUrls: {
-                    base: null,
-                    includeAbsolute: false,
+            options: {
+                compilerOptions: {
+                    isCustomElement: (tag) => ['md-linedivider'].includes(tag),
                 },
             },
         }),
@@ -24,5 +23,5 @@ export default defineConfig({
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
         },
-    },
+    }
 });

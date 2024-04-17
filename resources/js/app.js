@@ -1,13 +1,8 @@
-import "./bootstrap";
+import './bootstrap';
+import app from '@/adminComponent';
+import userApp from '@/userComponent';
+
+app.mount('#app');
+userApp.mount('#app');
 
 
-import { createApp } from "vue";
-import App from "./components/App.vue";
-import ExampleComponent from "./components/ExampleComponent.vue"; // Import the new component
-
-const app = createApp(App);
-
-// Register the new component
-app.component("example-component", ExampleComponent);
-
-app.mount("#app");
