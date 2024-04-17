@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_points', function (Blueprint $table) {
+        Schema::create('quests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('point_id');
-            $table->unsignedBigInteger('quest_id')->nullable();
-            $table->unsignedBigInteger('tweet_id')->nullable();
-            $table->softDeletes('deleted_at', precision: 0);
+            $table->string('tweet_id');
+            $table->longText('content');
+            $table->longText('user_id')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_points');
+        Schema::dropIfExists('quests');
     }
 };
