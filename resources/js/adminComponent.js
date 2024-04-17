@@ -1,4 +1,9 @@
-import Vue from 'vue';
 
-Vue.component('points-index', require('./components/points/Index.vue').default);
-Vue.component('points-model', require('./components/points/PointModel.vue').default);
+import { createApp } from 'vue';
+import pointsIndex from './components/points/Index.vue';
+
+const app = createApp({});
+app.component('pointsIndex', pointsIndex);
+
+
+export default app;

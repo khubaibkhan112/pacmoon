@@ -1,8 +1,8 @@
 import './bootstrap';
-import './adminComponentsRegister';
+import app from '@/adminComponent';
+import userApp from '@/userComponent';
 
-import Alpine from 'alpinejs';
+app.mount('#app');
+userApp.mount('#app');
 
-window.Alpine = Alpine;
 
-Alpine.start();

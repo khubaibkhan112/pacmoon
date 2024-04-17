@@ -1,21 +1,16 @@
-function page(path) {
-  return () =>
-    import(/ webpackChunkName: '' / `@/${path}`).then(
-      m => m.default || m
-    );
-}
+import { createRouter, createWebHistory } from 'vue-router'
 
-export default [
-  // Auth routes
-  // {
-  //   path: "/",
-  //   name: "welcome",
-  //   component: page("auth/login.vue")
-  // },
-  
-  {
-    path: "/welcome",
-    name: "home",
-    component: page("components/ExampleComponent.vue")
-  },
+import PointsIndex from '@/components/points/Index.vue'
+
+const routes = [
+    {
+        path: '/points',
+        name: 'points.index',
+        component: PointsIndex
+    }
 ];
+
+export default createRouter({
+    history: createWebHistory(),
+    routes
+})
