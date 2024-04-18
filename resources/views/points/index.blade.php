@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('content')
-<point-index :points={{$points}}></point-index>
+
+<points-index :points="{{ $points_data }}"></points-index>
 
 @endsection
 @push('scripts')

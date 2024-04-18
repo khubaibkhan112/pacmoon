@@ -1,21 +1,17 @@
 <template>
   <div>
     <div class="container-xxl flex-grow-1 container-p-y">
-      <div class="row g-3 mb-4 align-items-center">
-        <div class="col-3">
-          <h4 class="py-3 mb-2"> Points</h4>
-        </div>
-        <div class="col-9 justify-content-end d-flex">
-          <button type="button" class="btn btn-warning theme-button-color module-create-button" data-toggle="modal"
-            data-target="#PointsModel" @click="openModal('add', null)">
-            Add Points
-          </button>
-        </div>
-      </div>
+      <h4 class="py-3 mb-2"> Points</h4>
+      <button type="button" class="btn btn-success border-0 btn-flat" data-toggle="modal" data-target="#PointsModel"
+        @click="openFormModal('Add', null)">
+        <i class="fa-solid fa-plus pr-2"></i>
+        Add Points
+      </button>
+
       <!-- customers List Table -->
       <div class="card">
         <div class="table-responsive">
-          <table class=" table border-top">
+          <table class="table border-top">
             <thead>
               <tr>
                 <th>#</th>
@@ -27,7 +23,7 @@
             <tbody>
               <tr v-for="(obj, index) in points" :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ obj.notes }}</td>
+                <td>{{ obj.note }}</td>
                 <td>{{ obj.points }}</td>
                 <td class="text-nowrap align-middle text-center">
                   <div class="dropdown">
@@ -48,16 +44,16 @@
 
       </div>
     </div>
+    <!-- <point-model v-if="is_form_model" :modalType="modal_type" :objId="obj_id" @close-modal="closeModel">
+    </point-model> -->
   </div>
-  <!-- <pointModel v-if="is_form_model" :modal_type="modalType" :obj_id="objId" @close-modal="closeModel">
-  </pointModel> -->
 </template>
 
 <script>
 // import PointModel from './PointModel.vue';
 
 export default {
-  name: 'pointIndex',
+  name: 'questIndex',
   props: ['points'],
   components: {
     PointModel,
@@ -65,8 +61,8 @@ export default {
   data() {
     return {
       is_form_model: false,
-      modalType: '',
-      objId: '',
+      modal_type: '',
+      obj_id: '',
     }
   },
   computed: {
@@ -74,7 +70,16 @@ export default {
   created() {
   },
   methods: {
-
+    openFormModal(modalType, id) {
+      this.modal_type = modalType
+      this.obj_id = id
+      this.is_form_model = true
+    },
+    closeModel() {
+      this.is_form_model = false;
+      $(".modal-backdrop").remove();
+      $("body").removeClass('modal-open');
+    },
     // save employee
     async saveEmployee() {
       await this.form
@@ -90,17 +95,6 @@ export default {
           toast.fire({ type: "error", title: this.$t("common.error_msg") });
         });
     },
-    openModal(modalType, objId) {
-      this.modalType = modalType
-      this.objId = objId
-      this.is_form_model = true;
-    },
-    closeModel() {
-      this.is_form_model = false;
-    }
-  },
-  mounted() {
-    console.log(this.points);
   },
 };
 </script>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Point;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PointController extends Controller
 {
@@ -13,8 +15,14 @@ class PointController extends Controller
      */
     public function index()
     {
-        $points = Point::all();
-        return view('points.index', compact('points'));
+        $points =  Point::get()->toArray();
+        $points = json_encode($points);
+
+        // dd($points);
+
+        return view('points.index', [
+            'points_data' => $points
+        ]);
     }
 
     /**
@@ -30,7 +38,23 @@ class PointController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all(), 'here');
+        try {
+            DB::beginTransaction();
+
+            $points = new Point();
+
+            $points->points = $request->points;
+            $points->slug = \Str::slug($request->note, '_');
+            $points->note = $request->note;
+
+            $points->save();
+            DB::commit();
+            return response()->json(['message' => 'Points added successfully'], 201);
+        } catch (\Exception $exception) {
+            DB::rollback();
+            return response()->json(['error' => $exception->getMessage()], 500);
+        }
     }
 
     /**

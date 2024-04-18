@@ -189,14 +189,14 @@ $(function () {
       },
       // Buttons with Dropdown
       buttons: [
-        {
-          text: '<i class="ti ti-plus me-0 me-sm-1 mb-1 ti-xs"></i><span class="d-none d-sm-inline-block">Add Points</span>',
-          className: 'add-new btn btn-primary py-2 waves-effect waves-light',
-          attr: {
-            'data-bs-toggle': 'PointsModel',
-            'data-bs-target': '#PointsModel'
-          }
-        }
+        // {
+        //   text: '<i class="ti ti-plus me-0 me-sm-1 mb-1 ti-xs"></i><span class="d-none d-sm-inline-block">Add Points</span>',
+        //   className: 'add-new btn btn-primary py-2 waves-effect waves-light',
+        //   attr: {
+        //     'data-bs-toggle': 'PointsModel',
+        //     'data-bs-target': '#PointsModel'
+        //   }
+        // }
       ],
       // For responsive popup
       // responsive: {
