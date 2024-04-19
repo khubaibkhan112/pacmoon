@@ -34,8 +34,8 @@ class TwitterService
 
     public function postTweet($status)
     {
-        
-        $response = $this->client->post('statuses/update.json', [
+
+        $response = $this->client->post('/2/tweets', [
             'query' => ['status' => $status]
         ]);
 
@@ -43,7 +43,7 @@ class TwitterService
     }
     public function getuser()
     {
-        
+
         $response = $this->client->get('2/users/1774872213683863552');
 
         return json_decode($response->getBody(), true);
