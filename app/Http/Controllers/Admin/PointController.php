@@ -25,6 +25,12 @@ class PointController extends Controller
         ]);
     }
 
+    public function getData()
+    {
+        $points =  Point::get()->toArray();
+        return response()->json($points, 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -70,7 +76,14 @@ class PointController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        try {
+            // airline
+            $point = Point::whereId($id)->first();
+
+            return response()->json($point, 200);
+        } catch (\Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
+        }
     }
 
     /**
@@ -78,7 +91,21 @@ class PointController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $points = Point::findOrFail($id);
+
+            $points->points = $request->points;
+            $points->note = $request->note;
+
+            $points->save();
+            DB::commit();
+            return response()->json(['message' => 'Points Updated successfully'], 201);
+        } catch (\Exception $exception) {
+            DB::rollback();
+            return response()->json(['error' => $exception->getMessage()], 500);
+        }
     }
 
     /**
@@ -86,6 +113,14 @@ class PointController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $point = Point::findOrFail($id);
+            $point->delete();
+            session()->flash('message', 'Point deleted successfully!');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            session()->flash('error', 'Something went wrong. Please contact support!');
+            return redirect()->back();
+        }
     }
 }
