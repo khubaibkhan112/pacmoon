@@ -5,16 +5,34 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Quest;
 use Illuminate\Http\Request;
+use App\Services\TwitterService;
 
 class QuestController extends Controller
 {
+    protected $twitterService;
+
+    public function __construct(TwitterService $twitterService)
+    {
+        $this->twitterService = $twitterService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $quests=Quest::all();
-        return view('quests.index',compact('quests'));
+        $quests =  Quest::get()->toArray();
+        $quests = json_encode($quests);
+
+        return view('quests.index', [
+            'quests_data' => $quests
+        ]);
+    }
+
+    public function getData()
+    {
+        $quests =  Quest::get()->toArray();
+        return response()->json($quests, 200);
     }
 
     /**
@@ -30,7 +48,15 @@ class QuestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $content = $request->input('content');
+
+        $response = $this->twitterService->postTweet($content);
+
+        if (isset($response['data'])) {
+            return response()->json(['success' => true, 'message' => 'Tweet posted successfully']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Error posting tweet']);
+        }
     }
 
     /**
@@ -62,6 +88,12 @@ class QuestController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $response = $this->twitterService->deleteTweet($id);
+
+        if ($response['meta']['result'] == 'deleted') {
+            return response()->json(['success' => true, 'message' => 'Tweet deleted successfully']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Error deleting tweet']);
+        }
     }
 }
