@@ -18,9 +18,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::resource('points',PointController::class);
-    Route::get('get/points',[PointController::class,'getData'])->name('get-points');
-    Route::resource('quests',QuestController::class);
+    Route::resource('points', PointController::class);
+    Route::get('get/points', [PointController::class, 'getData'])->name('get-points');
+    Route::resource('quests', QuestController::class);
+    Route::get('get/quests', [QuestController::class, 'getData'])->name('get-quests');
 });
 
 Route::get('/twitter_acc', [ProfileController::class, 'twitterrAcc']);

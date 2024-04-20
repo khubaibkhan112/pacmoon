@@ -3,12 +3,12 @@
     <div class="container-xxl flex-grow-1 container-p-y">
       <div class="row g-3 mb-0 align-items-center">
         <div class="col-3">
-          <h4 class="py-3 mb-2"> Points</h4>
+          <h4 class="py-3 mb-2"> quests</h4>
         </div>
         <div class="col-9 justify-content-end d-flex">
           <button type="button" class="btn btn-warning theme-button-color module-create-button" data-toggle="modal"
-            data-target="#PointsModel" @click="openModal()">
-            Add Points
+            data-target="#questsModel" @click="openModal()">
+            Add Tweet
           </button>
         </div>
       </div>
@@ -19,19 +19,19 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th class="text-nowrap">points</th>
-                <th>Description</th>
+                <th class="text-nowrap">Tweet ID</th>
+                <th class="text-nowrap">Tweet</th>
                 <th class="text-nowrap text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(obj, index) in points" :key="index">
+              <tr v-for="(obj, index) in quests" :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ obj.points }}</td>
-                <td>{{ obj.note }}</td>
+                <td>{{ obj.twitter_id }}</td>
+                <td>{{ obj.content }}</td>
                 <td class="text-center">
-                    <a class="cursor-pointer" data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
-                    <a class="cursor-pointer" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>                   
+                    <a class="cursor-quester" data-toggle="modal" data-target="#questsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
+                    <a class="cursor-quester" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>                   
                 </td>
               </tr>
             </tbody>
@@ -41,17 +41,17 @@
       </div>
     </div>
   </div>
-  <pointModel :show="showModal" ref="pointFormModal"  @close="close" @points-list="pointsList"/>
+  <questModel :show="showModal" ref="questFormModal"  @close="close" @quests-list="questsList"/>
 </template>
 <script setup>
-    import PointModel from './PointModel.vue';
+    import questModel from './QuestModel.vue';
     import { ref , onMounted , defineProps } from 'vue';
     const showModal = ref(false);
     const objId = ref('');
-    const points = ref([]);
-    const pointFormModal = ref(null);
+    const quests = ref([]);
+    const questFormModal = ref(null);
     const props = defineProps({
-        points: {
+        quests: {
             type: Array,
             default: () => [],
         },
@@ -61,25 +61,26 @@
         }
         });
     onMounted(() => {
-        points.value = props.points;
+        console.log(props.quests);
+        quests.value = props.quests;
     });
     const openModal = (objId) => {
         showModal.value = true;
         console.log(objId);
         if(objId){
-            pointFormModal.value.loadPointData(objId)
+            questFormModal.value.loadquestData(objId)
         }
     };
 
     const deleteData = (objId) => {
-      const confirmed = confirm("Are you sure you want to delete this point?");
+      const confirmed = confirm("Are you sure you want to delete this quest?");
       if (confirmed) {
         axios({
-          url: `/points/${objId}`,
+          url: `/quests/${objId}`,
           method: 'DELETE',
         })
           .then(response => {
-            pointsList();
+            questsList();
           })
           .catch(error => {
             errorToast(error.response.error);
@@ -87,13 +88,13 @@
       }
     };
 
-    async function pointsList() {
+    async function questsList() {
         axios({
-              url: `get/points`,
+              url: `get/quests`,
               method: 'GET',
             })
             .then(response => {
-                points.value = response.data
+                quests.value = response.data
             })
             .catch(error => {
                 this.errorToast(error.response.error)
