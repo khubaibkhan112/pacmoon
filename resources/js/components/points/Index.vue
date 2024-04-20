@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container-xxl flex-grow-1 container-p-y">
-      <div class="row g-3 mb-4 align-items-center">
+      <div class="row g-3 mb-0 align-items-center">
         <div class="col-3">
           <h4 class="py-3 mb-2"> Points</h4>
         </div>
@@ -21,7 +21,7 @@
                 <th>#</th>
                 <th class="text-nowrap">points</th>
                 <th>Description</th>
-                <th class="text-nowrap">Action</th>
+                <th class="text-nowrap text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -29,11 +29,9 @@
                 <td>{{ index + 1 }}</td>
                 <td>{{ obj.points }}</td>
                 <td>{{ obj.note }}</td>
-                <td class="text-nowrap align-middle text-center">
-                  <div class="dropdown">
-                      <a class="dropdown-item" @click="openModal(obj.id)"><i class="ti ti-pencil me-1"></i> Edit</a>
-                      <a class="dropdown-item" ><i class="ti ti-trash me-1"></i> Delete</a>
-                  </div>
+                <td class="text-center">
+                    <a class="cursor-pointer" data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
+                    <a class="cursor-pointer" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>                   
                 </td>
               </tr>
             </tbody>
@@ -73,11 +71,26 @@
         }
     };
 
-    async function pointsList() {
-        console.log("In");
+    const deleteData = (objId) => {
+      const confirmed = confirm("Are you sure you want to delete this point?");
+      if (confirmed) {
         axios({
-                url: `get/points`,
-                method: 'GET',
+          url: `/points/${objId}`,
+          method: 'DELETE',
+        })
+          .then(response => {
+            pointsList();
+          })
+          .catch(error => {
+            errorToast(error.response.error);
+          });        
+      }
+    };
+
+    async function pointsList() {
+        axios({
+              url: `get/points`,
+              method: 'GET',
             })
             .then(response => {
                 points.value = response.data
@@ -93,73 +106,5 @@
             showModal.value = false
 
         }
-    }
-    // async function pointsList() {
-    //         axios({
-    //             url: `/points`,
-    //             method: 'GET',
-    //         })
-    //         .then(response => {
-    //             this.loading = false
-    //             this.points = response.data
-    //         })
-    //         .catch(error => {
-    //             this.errorToast(error.response.error)
-    //         })
-
-    // }
-    // pointsList();
-
+    }   
 </script>
-<!-- <script>
-import PointModel from './PointModel.vue';
-
-export default {
-  name: 'pointsIndex',
-  props: ['points'],
-  components: {
-    PointModel,
-  },
-  data() {
-    return {
-      is_form_model: false,
-      modalType: '',
-      objId: '',
-    }
-  },
-  computed: {
-  },
-  created() {
-  },
-  methods: {
-
-    // save employee
-    async saveEmployee() {
-      await this.form
-        .post(window.location.origin + "/api/employees")
-        .then(() => {
-          toast.fire({
-            type: "success",
-            title: this.$t("employees.list.create.success_msg"),
-          });
-          this.$router.push({ name: "employees.index" });
-        })
-        .catch(() => {
-          toast.fire({ type: "error", title: this.$t("common.error_msg") });
-        });
-    },
-    openModal(modalType, objId) {
-      this.modalType = modalType
-      this.objId = objId
-      this.is_form_model = true;
-    },
-    closeModel() {
-      this.is_form_model = false;
-    }
-  },
-  mounted() {
-    console.log(this.points);
-  },
-
-};
-</script> -->
