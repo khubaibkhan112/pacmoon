@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('quest_likes', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('quest_id');
             $table->unsignedBigInteger('tweeter_id');
             $table->timestamps();
