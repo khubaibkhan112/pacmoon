@@ -27,7 +27,7 @@
             <tbody>
               <tr v-for="(obj, index) in quests" :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ obj.twitter_id }}</td>
+                <td>{{ obj.tweet_id }}</td>
                 <td>{{ obj.content }}</td>
                 <td class="text-center">
                     <a class="cursor-quester" data-toggle="modal" data-target="#questsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
@@ -54,12 +54,8 @@
         quests: {
             type: Array,
             default: () => [],
-        },
-        number: {
-            type : Number,
-            default: 0
-        }
-        });
+        }       
+      });
     onMounted(() => {
         console.log(props.quests);
         quests.value = props.quests;
@@ -104,8 +100,7 @@
     function close(){
         if(showModal.value==true)
         {
-            showModal.value = false
-
+          showModal.value = false
         }
     }   
 </script>
