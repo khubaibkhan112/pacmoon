@@ -61,7 +61,7 @@ class TwitterService
     }
 
 
-    public function getuser()
+    public function getuser($id)
     {
 
         $response = $this->client->get('2/users/1774872213683863552');
@@ -71,6 +71,11 @@ class TwitterService
     public function getTweets($id)
     {
         $response = $this->client->get('/2/tweets/' . $id);
+        return json_decode($response->getBody(), true);
+    }
+    public function getUserLikedTweets($id)
+    {
+        $response = $this->client->get('/2/users/'.$id.'/liked_tweets');
         return json_decode($response->getBody(), true);
     }
 }

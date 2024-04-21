@@ -12,9 +12,9 @@ class UserPointController extends Controller
     {
         // try {
             // $user = User::where("id",$request->id)->first();
-            $user_id = 1;
-            dd($user_id);
-            SyncUserLikesData($user_id);
+            $user_id = 1519637376410206208;
+           $data= SyncUserLikesData($user_id);
+           
             return response()->json(['message' => 'Points added successfully'], 201);
         // } catch (\Exception $exception) {
         //     DB::rollback();
