@@ -116,11 +116,10 @@ class PointController extends Controller
         try {
             $point = Point::findOrFail($id);
             $point->delete();
-            session()->flash('message', 'Point deleted successfully!');
-            return redirect()->back();
+            // session()->flash('message', 'Point deleted successfully!');
+            return response()->json(['message' => 'Point deleted successfully'], 200);
         } catch (\Exception $e) {
-            session()->flash('error', 'Something went wrong. Please contact support!');
-            return redirect()->back();
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

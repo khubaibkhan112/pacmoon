@@ -15,7 +15,7 @@ class TwitterService
 
     public function __construct()
     {
-    $this->apiKey = env('TWITTER_CONSUMER_KEY');
+        $this->apiKey = env('TWITTER_CONSUMER_KEY');
         $this->apiSecret = env('TWITTER_CONSUMER_SECRET');
         $this->accessToken = env('TWITTER_ACCESS_TOKEN');
         $this->accessTokenSecret = env('TWITTER_ACCESS_TOKEN_SECRET');
@@ -32,15 +32,35 @@ class TwitterService
         ]);
     }
 
-    public function postTweet($status)
-    {
+    // public function postTweet($status)
+    // {
 
+    //     $response = $this->client->post('/2/tweets', [
+    //         'query' => ['status' => $status]
+    //     ]);
+
+    //     return json_decode($response->getBody(), true);
+    // }
+
+    public function postTweet($tweetText)
+    {
         $response = $this->client->post('/2/tweets', [
-            'query' => ['status' => $status]
+            'json' => [
+                'text' => $tweetText
+            ]
         ]);
 
         return json_decode($response->getBody(), true);
     }
+
+    public function deleteTweet($tweetId)
+    {
+        $response = $this->client->delete("/2/tweets/{$tweetId}");
+
+        return json_decode($response->getBody(), true);
+    }
+
+
     public function getuser($id)
     {
 
@@ -50,7 +70,7 @@ class TwitterService
     }
     public function getTweets($id)
     {
-        $response = $this->client->get('/2/tweets/'.$id);
+        $response = $this->client->get('/2/tweets/' . $id);
         return json_decode($response->getBody(), true);
     }
     public function getUserLikedTweets($id)
