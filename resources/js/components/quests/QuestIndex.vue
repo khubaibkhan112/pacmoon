@@ -3,7 +3,7 @@
     <div class="container-xxl flex-grow-1 container-p-y">
       <div class="row g-3 mb-0 align-items-center">
         <div class="col-3">
-          <h4 class="py-3 mb-2"> quests</h4>
+          <h4 class="py-3 mb-2"> Quests</h4>
         </div>
         <div class="col-9 justify-content-end d-flex">
           <button type="button" class="btn btn-warning theme-button-color module-create-button" data-toggle="modal"
