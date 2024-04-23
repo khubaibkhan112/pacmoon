@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 
 class TwitterService
 {
@@ -70,7 +71,10 @@ class TwitterService
     }
     public function getTweets($id)
     {
-        $response = $this->client->get('/2/tweets/' . $id);
+        $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
+        // $startOfDay = "2024-04-22T00:00:01Z";
+        // https://api.twitter.com/2/users/1519637376410206208/tweets?start_time=2024-04-22T00:00:01Z&expansions=entities.mentions.username
+        $response = $this->client->get('/2/users/' . $id .'/tweets?start_time='. $startOfDay .'&expansions=entities.mentions.username');
         return json_decode($response->getBody(), true);
     }
     public function getUserLikedTweets($id)
@@ -78,4 +82,6 @@ class TwitterService
         $response = $this->client->get('/2/users/'.$id.'/liked_tweets');
         return json_decode($response->getBody(), true);
     }
+    
+
 }
