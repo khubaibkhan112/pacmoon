@@ -71,16 +71,20 @@ class TwitterService
     }
     public function getTweets($id)
     {
-        $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
-        // $startOfDay = "2024-04-22T00:00:01Z";
+        // $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
+         $startOfDay = "2024-04-22T00:00:01Z";
         // https://api.twitter.com/2/users/1519637376410206208/tweets?start_time=2024-04-22T00:00:01Z&expansions=entities.mentions.username
-        $response = $this->client->get('/2/users/' . $id .'/tweets?start_time='. $startOfDay .'&expansions=entities.mentions.username');
+        $response = $this->client->get('/2/users/' . $id .'/tweets?start_time='. $startOfDay .'&tweet.fields=public_metrics&expansions=entities.mentions.username,attachments.media_keys&media.fields=public_metrics');
         return json_decode($response->getBody(), true);
     }
     public function getUserLikedTweets($id)
     {
         $response = $this->client->get('/2/users/'.$id.'/liked_tweets');
         return json_decode($response->getBody(), true);
+    }
+    public function getTweetMatrics($ids)  {
+        // https://api.twitter.com/2/tweets?ids=1782354247440310587,1782377629443604921&tweet.fields=public_metrics&expansions=attachments.media_keys&media.fields=public_metrics
+        $response = $this->client->get('/2/tweets?ids='. $ids .'&tweet.fields=public_metrics&expansions=attachments.media_keys&media.fields=public_metrics');
     }
     
 
