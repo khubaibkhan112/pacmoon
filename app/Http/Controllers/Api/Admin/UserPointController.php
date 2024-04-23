@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Point;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\UserPoint;
@@ -13,25 +14,51 @@ class UserPointController extends Controller
         // try {
             // $user = User::where("id",$request->id)->first();
             $user_id = 1519637376410206208;
+            $points_slug = "mentioned_mingo_in_tweet";
 
-            $syncuser= SyncUserLikesData($user_id);
+            // $syncuser= SyncUserLikesData($user_id);
             
-
            $metioned_ids= getUserTweets($user_id);
            $likedtweets=getMingolikedTweets();
         //    dd($likedtweets);
         $tweet_ids=[];
         // dd($likedtweets,$metioned_ids);
-        $points_slug = "mentioned_mingo_in_tweet";
+        
+        
+        // dd($points);
+        $points_metrics=[];
            foreach($likedtweets as $tweet){
-                if(in_array($tweet['id'],$metioned_ids)){
+                if(isset($metioned_ids[$tweet['id']])){
                     array_push($tweet_ids, $tweet['id']);
+                    $points_metrics['points_for_views'][]=[
+                        'user_id'=>$user_id,
+                        'tweet_id'=>$tweet['id'],
+                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_views'],
+                        'point_id'=>0,
+                    ];
+                    $points_metrics['points_for_retweets'][]=[
+                        'user_id'=>$user_id,
+                        'tweet_id'=>$tweet['id'],
+                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_retweets'],
+                        'point_id'=>0,
+                    ];
+                    $points_metrics['points_for_like'][]=[
+                        'user_id'=>$user_id,
+                        'tweet_id'=>$tweet['id'],
+                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_like'],
+                        'point_id'=>0,
+                    ];
+
                 }
            }
+           
            if (count($tweet_ids)) {
             $user_points = new UserPoint;
             $user_points->addPoints($user_id, $points_slug, $tweet_ids, $is_quest=false);
+            $metrics_points = new UserPoint;
+            $metrics_points->addMetricPoints($points_metrics);
         }
+
            
             return response()->json(['message' => 'Points added successfully'], 201);
         // } catch (\Exception $exception) {
