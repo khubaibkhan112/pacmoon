@@ -56,7 +56,7 @@ class UserPointController extends Controller
             $user_points = new UserPoint;
             $user_points->addPoints($user_id, $points_slug, $tweet_ids, $is_quest=false);
             $metrics_points = new UserPoint;
-            $metrics_points->addMetricPoints($points_metrics);
+            $metrics_points->addMetricPoints($points_metrics,$tweet_ids,$user_id);
         }
 
            
