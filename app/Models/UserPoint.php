@@ -14,7 +14,7 @@ class UserPoint extends Model
         'quest_id',
         'tweet_id',
     ];
-    public function addPoints($user_id,$points_slug,$quest_id=Null,$is_quest=true){    
+    public function addPoints($user_id,$points_slug,$quest_id=Null,$is_quest=true){
         $point=Point::select('id')->where('slug',$points_slug)->first();
 
         $quest_or_tweet=$quest_id;
@@ -37,6 +37,16 @@ class UserPoint extends Model
         // dd($data);
         if(count($data)) $user_points_row=self::insert($data);
         // dd($data);
+    }
+
+    public function point()
+    {
+        $this->belongsTo(Point::class);
+    }
+
+    public function user()
+    {
+        $this->belongsTo(User::class);
     }
 
 }
