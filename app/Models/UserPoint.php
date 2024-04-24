@@ -14,7 +14,7 @@ class UserPoint extends Model
         'quest_id',
         'tweet_id',
     ];
-    public function addPoints($user_id,$points_slug,$quest_id=Null,$is_quest=true){    
+    public function addPoints($user_id,$points_slug,$quest_id=Null,$is_quest=true){
         $point=Point::select('id')->where('slug',$points_slug)->first();
 
         $quest_or_tweet=$quest_id;
@@ -35,7 +35,7 @@ class UserPoint extends Model
                );
         }
         if(count($data)) $user_points_row=self::insert($data);
-        
+
     }
     public function addMetricPoints($data,$tweet_ids,$user_id)  {
         $points=Point::whereIn('slug',['points_for_like','points_for_retweets','points_for_views'])->get()->toArray();
