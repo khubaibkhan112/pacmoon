@@ -54,7 +54,7 @@ function getUserTweets($user_id)
     $user_tweets_data = new TwitterService();
     $user_tweets_data = $user_tweets_data->getTweets($user_id);
     $filteredTweets = [];
-
+    // dd($user_tweets_data);
     foreach ($user_tweets_data['data'] as $tweet) {
         $mentions =isset($tweet['entities']) && isset($tweet['entities']['mentions']) ? $tweet['entities']['mentions'] : [];
         $tags = $tweet['text'];
@@ -70,7 +70,15 @@ function getUserTweets($user_id)
         $hasMingoTags = preg_match('/#MingooDay|#mingoApps|#mingo/', $tags);
 
         if ($mentionedMingoApps || $hasMingoTags) {
-            $filteredTweets[] = $tweet['id'];
+            $filteredTweets[$tweet['id']] = [
+               "id" => $tweet['id'],
+            //    "slug"=>$points_slug,
+               "points_for_retweets" => isset($tweet['public_metrics'])  ? $tweet['public_metrics']['retweet_count'] : [],
+               "points_for_like" => isset($tweet['public_metrics'])  ? $tweet['public_metrics']['like_count'] : [],
+               "points_for_views" => isset($tweet['public_metrics'])  ? $tweet['public_metrics']['impression_count'] : [],
+            ];
+            
+
         }
     }
     return $filteredTweets;

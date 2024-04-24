@@ -34,19 +34,17 @@ class UserPoint extends Model
                 ]
                );
         }
-        // dd($data);
         if(count($data)) $user_points_row=self::insert($data);
-        // dd($data);
-    }
 
-    public function point()
-    {
-        $this->belongsTo(Point::class);
     }
-
-    public function user()
-    {
-        $this->belongsTo(User::class);
+    public function addMetricPoints($data)  {
+        $points=Point::whereIn('slug',['points_for_like','points_for_retweets','points_for_views'])->get()->toArray();
+        $points_data=[];
+        // dd($points,$data);
+        foreach($points as $point){
+            dd($point->slug);
+            $slug_data= $data[$point->slug];
+            dd($slug_data);
+        }
     }
-
 }
