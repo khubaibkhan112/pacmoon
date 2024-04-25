@@ -15,11 +15,11 @@ class PointApiResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'user_id' => $this->user_id,
-            'name' => $this->user->name,
-            'phone' => $this->user->phone,
-            'point_slug' => $this->point->slug,
-            'points' => $this->total_point,
+            'user_id' => $request->twitter_id,
+            'name' => $request->user->name,
+            'phone' => $request->user->phone,
+            'point_slug' => $request->point->slug,
+            'points' => $request->total_point,
         ];
     }
 

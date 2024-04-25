@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function syncUserInformation(Request $request,string $user_id = null)
+    public function syncUserInformation($request,string $user_id = null)
     {
-        $user_id = isset($user_id) ? $user_id : $request->user_id;
+        $user_id = isset($user_id) ? $user_id : $request->twitter_id;
         getUserTweets($user_id);
         SyncUserShareData($user_id);
         SyncUserLikesData($user_id);

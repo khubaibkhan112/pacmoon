@@ -77,17 +77,25 @@ function getUserTweets($user_id)
                "points_for_like" => isset($tweet['public_metrics'])  ? $tweet['public_metrics']['like_count'] : [],
                "points_for_views" => isset($tweet['public_metrics'])  ? $tweet['public_metrics']['impression_count'] : [],
             ];
-            
+
 
         }
     }
     return $filteredTweets;
-    
+
 }
  function getMingolikedTweets(){
     $pointsService = new TwitterService();
     $id="1770029816428802048";
     $data = $pointsService->getUserLikedTweets($id);
+    return $data['data'];
+}
+
+function checkFollow()
+{
+    $pointsService = new TwitterService();
+    $id="1770029816428802048";
+    $data = $pointsService->checkFollow($id);
     return $data['data'];
 }
 

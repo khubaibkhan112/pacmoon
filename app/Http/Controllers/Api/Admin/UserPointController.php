@@ -15,13 +15,13 @@ class UserPointController extends Controller
         try {
             $user = User::where("id",$request->id)->first();
             $user_id = 1519637376410206208;
-            
+
 
              $syncuser= SyncUserLikesData($user_id);
-            
-           
 
-           
+
+
+
             return response()->json(['message' => 'Points added successfully'], 201);
         } catch (\Exception $exception) {
             DB::rollback();
@@ -38,8 +38,8 @@ class UserPointController extends Controller
         //    dd($likedtweets);
         $tweet_ids=[];
         // dd($likedtweets,$metioned_ids);
-        
-        
+
+
         // dd($points);
         $points_metrics=[];
            foreach($likedtweets as $tweet){
@@ -66,7 +66,7 @@ class UserPointController extends Controller
 
                 }
            }
-           
+
            if (count($tweet_ids)) {
             $user_points = new UserPoint;
             $user_points->addPoints($user_id, $points_slug, $tweet_ids, $is_quest=false);
@@ -79,14 +79,14 @@ class UserPointController extends Controller
             $points_slug = "mentioned_mingo_in_tweet";
 
             // $syncuser= SyncUserLikesData($user_id);
-            
+
            $metioned_ids= getUserTweets($user_id);
            $likedtweets=getMingolikedTweets();
         //    dd($likedtweets);
         $tweet_ids=[];
         // dd($likedtweets,$metioned_ids);
-        
-        
+
+
         // dd($points);
         $points_metrics=[];
            foreach($likedtweets as $tweet){
@@ -113,7 +113,7 @@ class UserPointController extends Controller
 
                 }
            }
-           
+
            if (count($tweet_ids)) {
             $user_points = new UserPoint;
             $user_points->addPoints($user_id, $points_slug, $tweet_ids, $is_quest=false);
@@ -121,12 +121,32 @@ class UserPointController extends Controller
             $metrics_points->addMetricPoints($points_metrics,$tweet_ids,$user_id);
         }
 
-           
+
             return response()->json(['message' => 'Points added successfully'], 201);
         // } catch (\Exception $exception) {
         //     DB::rollback();
         //     return response()->json(['error' => $exception->getMessage()], 500);
         // }
+    }
+
+    public function follow($twitter_id)
+    {
+        $mingo_twitter_id = '1519637376410206208';
+        $followers = checkFollow($mingo_twitter_id);
+        $follow=false;
+           foreach($followers as $follow){
+                if(isset($twitter_id) && $twitter_id==$follow['id']){
+                    $follow = true;
+                }
+           }
+        if($follow)
+        {
+            app('App\Http\Controllers\Api\Admin\HomeController')->syncUserInformation('' , $twitter_id);
+            return response()->json(['message' => 'User Data Successfully Updated'], 200);
+        }else{
+            return response()->json(['message' => 'User Not Following'], 400);
+        }
+
     }
 
 }
