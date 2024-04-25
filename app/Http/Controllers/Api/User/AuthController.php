@@ -12,20 +12,30 @@ class AuthController extends Controller
 {
     function register(Request $request){
 
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->phone = $request->input('phone');
-        $user->twitter_id = $request->input('twitter_id');
-        $user->twitter_token = $request->input('twitter_token');
-        $user->profile_img = $request->input('profile_img');
-
-        $user->save();
-        app('App\Http\Controllers\Api\Admin\HomeController')->syncUserInformation($user->id);
+        $user = User::where('twitter_id',$request->twitter_id)->first();
+        if(isset($user))
+        {
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->phone = $request->input('phone');
+            $user->twitter_id = $request->input('twitter_id');
+            $user->twitter_token = $request->input('twitter_token');
+            $user->profile_img = $request->input('profile_img');
+            $user->save();
+        }else{
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->phone = $request->input('phone');
+            $user->twitter_id = $request->input('twitter_id');
+            $user->twitter_token = $request->input('twitter_token');
+            $user->profile_img = $request->input('profile_img');
+            $user->save();
+        }
+        // app('App\Http\Controllers\Api\Admin\HomeController')->syncUserInformation($request , $user->twitter_id);
         $pointData = UserPoint::with('points')->where('user_id',$user->id);
-
-
-        return new PointApiResource($pointData);
-
+        dd($pointData);
+        $data = isset($pointData) ?  new PointApiResource($pointData) :  response()->json(['message' => 'Points added successfully'], 201);
+        return $data;
     }
 }

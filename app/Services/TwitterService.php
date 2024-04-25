@@ -86,6 +86,12 @@ class TwitterService
         // https://api.twitter.com/2/tweets?ids=1782354247440310587,1782377629443604921&tweet.fields=public_metrics&expansions=attachments.media_keys&media.fields=public_metrics
         $response = $this->client->get('/2/tweets?ids='. $ids .'&tweet.fields=public_metrics&expansions=attachments.media_keys&media.fields=public_metrics');
     }
-    
+
+    public function checkFollow($id)
+    {
+        $response = $this->client->get('/2/users/' . $id .'/followers');
+        return json_decode($response->getBody(), true);
+    }
+
 
 }
