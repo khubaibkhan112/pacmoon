@@ -11,7 +11,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 Route::post('/register', [AuthController::class,'register']);
 Route::post('/userfollow', [UserPointController::class,'follow']);
-Route::post('/dataSync', [HomeController::class,'syncUserInformation']);
+Route::post('/dataSync/{slug}', [HomeController::class,'syncUserInformation']);
 Route::post('/getlikepoints',[UserPointController::class, 'getlikeData']);
 Route::get('/getmingomentions',[UserPointController::class, 'getMingoMentionsData']);
 Route::get('/getquests',[UserPointController::class, 'getQuests']);
