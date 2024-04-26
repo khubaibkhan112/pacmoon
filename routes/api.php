@@ -10,8 +10,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 Route::post('/register', [AuthController::class,'register']);
+
+Route::middleware('auth:sanctum')->group(function () {
 Route::post('/userfollow', [UserPointController::class,'follow']);
 Route::post('/dataSync/{slug}', [HomeController::class,'syncUserInformation']);
 Route::post('/getlikepoints',[UserPointController::class, 'getlikeData']);
 Route::get('/getmingomentions',[UserPointController::class, 'getMingoMentionsData']);
 Route::get('/getquests',[UserPointController::class, 'getQuests']);
+});

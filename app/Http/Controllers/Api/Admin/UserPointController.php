@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\QuestResource;
 use App\Models\Point;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\UserPoint;
 use App\Models\User;
+use App\Models\Quest;
+
 class UserPointController extends Controller
 {
     public function getlikeData(Request $request)
@@ -148,5 +151,23 @@ class UserPointController extends Controller
         }
 
     }
-
+    public function getQuests(Request $request){
+        // $twitter_id=$request->twitter_id;
+        $twitter_id=1519637376410206208;
+        $syncuser= SyncUserLikesData($twitter_id);
+        $quests = Quest::withCount(['questLikes' => function ($q) use ($twitter_id) {
+            $q->where('user_id', $twitter_id);
+        }])->get();
+        //  dd($quests->get());
+        // $resource = QuestResource::collection($quests);
+            return response()->json([
+                'status' => 'success',
+                'quests' => $quests,
+            ], 200);
+        // $resource = QuestResource::collection($quests->get());
+        //     return response()->json([
+        //         'status' => 'success',
+        //         'quests' => $resource,
+        //     ], 200);
+    }
 }
