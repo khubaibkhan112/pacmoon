@@ -33,9 +33,15 @@ class AuthController extends Controller
             $user->save();
         }
         // app('App\Http\Controllers\Api\Admin\HomeController')->syncUserInformation($request , $user->twitter_id);
-        $pointData = UserPoint::with('points')->where('user_id',$user->id);
-        dd($pointData);
-        $data = isset($pointData) ?  new PointApiResource($pointData) :  response()->json(['message' => 'Points added successfully'], 201);
-        return $data;
+        $pointData = UserPoint::with('points')->where('user_id',$user->id)->get();
+        // dd($pointData);
+        // $data = isset($pointData) ?  new PointApiResource($pointData) :  response()->json(['message' => 'Points added successfully'], 201);
+    
+        return response()->json([
+            "user"=>$user,
+            'points'=>$pointData,
+            'token' => $user->createToken(\Str::random(20))->plainTextToken
+
+        ],200);
     }
 }
