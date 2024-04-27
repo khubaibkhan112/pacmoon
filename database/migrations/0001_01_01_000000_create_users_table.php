@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('phone')->unique()->nullable();
             $table->string('twitter_id')->unique()->nullable();
-            $table->string('twitter_token')->unique()->nullable();
+            // $table->string('twitter_token')->unique()->nullable();
             $table->longText('profile_img')->nullable();
             $table->boolean('is_valid')->default(false);
             $table->timestamp('email_verified_at')->nullable();
