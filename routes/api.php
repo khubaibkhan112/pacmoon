@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\Admin\UserPointController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-Route::post('/register', [AuthController::class,'register']);
+Route::post('/login', [AuthController::class,'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
 Route::post('/userfollow', [UserPointController::class,'follow']);

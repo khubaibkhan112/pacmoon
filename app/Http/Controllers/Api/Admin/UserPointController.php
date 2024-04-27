@@ -16,8 +16,8 @@ class UserPointController extends Controller
     public function getlikeData(Request $request)
     {
         try {
-            $user = User::where("id",$request->id)->first();
-            $user_id = 1519637376410206208;
+            // $user = User::where("id",$request->id)->first();
+            $user_id = auth()->user()->twitter_id;
 
 
              $syncuser= SyncUserLikesData($user_id);
@@ -78,7 +78,7 @@ class UserPointController extends Controller
         }
         // try {
             // $user = User::where("id",$request->id)->first();
-            $user_id = 1519637376410206208;
+            $user_id = auth()->user()->twitter_id;
             $points_slug = "mentioned_mingo_in_tweet";
 
             // $syncuser= SyncUserLikesData($user_id);
