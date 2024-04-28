@@ -6,10 +6,10 @@
           <h4 class="py-3 mb-2"> Points</h4>
         </div>
         <div class="col-9 justify-content-end d-flex">
-          <button type="button" class="btn btn-warning theme-button-color module-create-button" data-toggle="modal"
+          <!-- <button type="button" class="btn btn-warning theme-button-color module-create-button" data-toggle="modal"
             data-target="#PointsModel" @click="openModal()">
             Add Points
-          </button>
+          </button> -->
         </div>
       </div>
       <!-- customers List Table -->
@@ -21,18 +21,18 @@
                 <th>#</th>
                 <th class="text-nowrap">points</th>
                 <th>Description</th>
-                <th class="text-nowrap text-center">Action</th>
+                <!-- <th class="text-nowrap text-center">Action</th> -->
               </tr>
             </thead>
             <tbody>
               <tr v-for="(obj, index) in points" :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ obj.points }}</td>
+                <td data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)" class="cursor-pointer text-primary">{{ obj.points }}</td>
                 <td>{{ obj.note }}</td>
-                <td class="text-center">
+                <!-- <td class="text-center">
                     <a class="cursor-pointer" data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
                     <a class="cursor-pointer" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>                   
-                </td>
+                </td> -->
               </tr>
             </tbody>
           </table>
