@@ -3,7 +3,7 @@
     <div class="container-xxl flex-grow-1 container-p-y">
       <div class="row g-3 mb-0 align-items-center">
         <div class="col-3">
-          <h4 class="py-3 mb-2"> quests</h4>
+          <h4 class="py-3 mb-2"> Quests</h4>
         </div>
         <div class="col-9 justify-content-end d-flex">
           <button type="button" class="btn btn-warning theme-button-color module-create-button" data-toggle="modal"
@@ -27,7 +27,7 @@
             <tbody>
               <tr v-for="(obj, index) in quests" :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ obj.twitter_id }}</td>
+                <td>{{ obj.tweet_id }}</td>
                 <td>{{ obj.content }}</td>
                 <td class="text-center">
                     <a class="cursor-quester" data-toggle="modal" data-target="#questsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
@@ -54,12 +54,8 @@
         quests: {
             type: Array,
             default: () => [],
-        },
-        number: {
-            type : Number,
-            default: 0
-        }
-        });
+        }       
+      });
     onMounted(() => {
         console.log(props.quests);
         quests.value = props.quests;
@@ -104,8 +100,7 @@
     function close(){
         if(showModal.value==true)
         {
-            showModal.value = false
-
+          showModal.value = false
         }
     }   
 </script>
