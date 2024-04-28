@@ -19,7 +19,7 @@ class AuthController extends Controller
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
             $user->twitter_id = $request->input('twitter_id');
-            $user->twitter_token = $request->input('twitter_token');
+            // $user->twitter_token = $request->input('twitter_token');
             $user->profile_img = $request->input('profile_img');
             $user->save();
         }else{
@@ -28,7 +28,7 @@ class AuthController extends Controller
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
             $user->twitter_id = $request->input('twitter_id');
-            $user->twitter_token = $request->input('twitter_token');
+            // $user->twitter_token = $request->input('twitter_token');
             $user->profile_img = $request->input('profile_img');
             $user->save();
         }
