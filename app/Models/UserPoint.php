@@ -69,6 +69,8 @@ class UserPoint extends Model
         $updatedArray = array_filter($updatedArray);
         return $updatedArray;
     }
-
+    public function point(){
+        return $this->belongsTo(Point::class)->select('id','slug','points');
+    }
 // Use array_map to apply the function to each element of the array
 }
