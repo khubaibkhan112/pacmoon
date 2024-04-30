@@ -71,7 +71,7 @@ class ProfileController extends Controller
         $response = $this->twitter->getuser();
     //    $tweet= new Twitter;
     //    $tweet->getTweet($id);
-       dd($response);
+    //    dd($response);
         
     }
 

@@ -12,17 +12,17 @@ class QuestResource extends ResourceCollection
      *
      * @return array<int|string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
-        // return parent::toArray($request);
-        return [
-            'id' => $this->id,
-            'content' => $this->content,
-            'tweet_id' => $this->tweet_id,
-            'tweet_id' => $this->tweet_id,
-            'quest_liked' => $this->quest_likes_count ? true : false,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ];
+        return $this->collection->map(function ($item) {
+            return [
+                'id' => $item['id'],
+                'content' => $item['content'],
+                'tweet_id' => $item['tweet_id'],
+                'quest_liked' => $item['quest_likes_count'] ? true : false,
+                'created_at' => $item['created_at'],
+                'updated_at' => $item['updated_at'],
+            ];
+        });
     }
 }
