@@ -152,7 +152,7 @@ class UserPointController extends Controller
 
     }
     public function getQuests(Request $request){
-        $twitter_id=$request->twitter_id;
+        $twitter_id=auth()->user()->twitter_id;
         // $twitter_id=1519637376410206208;
         $syncuser= SyncUserLikesData($twitter_id);
         $quests = Quest::withCount(['questLikes' => function ($q) use ($twitter_id) {
