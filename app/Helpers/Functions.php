@@ -17,20 +17,22 @@ function SyncUserQuestData()
 function SyncUserLikesData($id, $is_quest = true,)
 {
     $pointsService = new TwitterService();
-    $data = $pointsService->getUserLikedTweets($id);
     $questids = Quest::select('tweet_id')->pluck('tweet_id')->toArray();
     $questids = [];
-    $points_slug = "liked_a_quest";
-    foreach ($data['data'] as $tweet) {
-        //  dd($questids,$tweet['id']);
-        if (in_array($tweet['id'], $questids)) {
-            array_push($questids, $tweet['id']);
+    if(isset($questids)){
+        $data = $pointsService->getUserLikedTweets($id);
+        $points_slug = "liked_a_quest";
+        foreach ($data['data'] as $tweet) {
+            //  dd($questids,$tweet['id']);
+            if (in_array($tweet['id'], $questids)) {
+                array_push($questids, $tweet['id']);
+            }
         }
-    }
-    // dd($questids);
-    if (count($questids)) {
-        $user_points = new UserPoint;
-        $user_points->addPoints($id, $points_slug, $questids, $is_quest);
+        // dd($questids);
+        if (count($questids)) {
+            $user_points = new UserPoint;
+            $user_points->addPoints($id, $points_slug, $questids, $is_quest);
+        }
     }
     // Call API for Getting User Latest Data Saved in Db.
 

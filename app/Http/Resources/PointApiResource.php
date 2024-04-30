@@ -21,7 +21,7 @@ class PointApiResource extends ResourceCollection
                 'total_points' => $item['point']['points'] ? $item['total_count'] * $item['point']['points'] : 0,
                 'tweet_id' => $item['tweet_id'] ?? '',
                 'quest_id' => $item['quest_id'] ?? '',
-                'for_count' => $item['total_count'] ?? 0,
+                'for_count' => $item['total_count'] ?? 1,
             ];
         });
     }
