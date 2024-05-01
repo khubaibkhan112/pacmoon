@@ -17,4 +17,5 @@ Route::post('/dataSync/{slug}', [HomeController::class,'syncUserInformation']);
 Route::post('/getlikepoints',[UserPointController::class, 'getlikeData']);
 Route::get('/getmingomentions',[UserPointController::class, 'getMingoMentionsData']);
 Route::get('/getquests',[UserPointController::class, 'getQuests']);
+Route::get('/addfollowpoints',[UserPointController::class, 'addFollowPoints']);
 });
