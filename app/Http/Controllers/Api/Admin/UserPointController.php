@@ -132,25 +132,25 @@ class UserPointController extends Controller
         // }
     }
 
-    public function follow($twitter_id)
-    {
-        $mingo_twitter_id = '1519637376410206208';
-        $followers = checkFollow($mingo_twitter_id);
-        $follow=false;
-           foreach($followers as $follow){
-                if(isset($twitter_id) && $twitter_id==$follow['id']){
-                    $follow = true;
-                }
-           }
-        if($follow)
-        {
-            app('App\Http\Controllers\Api\Admin\HomeController')->syncUserInformation('' , $twitter_id);
-            return response()->json(['message' => 'User Data Successfully Updated'], 200);
-        }else{
-            return response()->json(['message' => 'User Not Following'], 400);
-        }
+    // public function follow($twitter_id)
+    // {
+    //     $mingo_twitter_id = '1519637376410206208';
+    //     $followers = checkFollow($mingo_twitter_id);
+    //     $follow=false;
+    //        foreach($followers as $follow){
+    //             if(isset($twitter_id) && $twitter_id==$follow['id']){
+    //                 $follow = true;
+    //             }
+    //        }
+    //     if($follow)
+    //     {
+    //         app('App\Http\Controllers\Api\Admin\HomeController')->syncUserInformation('' , $twitter_id);
+    //         return response()->json(['message' => 'User Data Successfully Updated'], 200);
+    //     }else{
+    //         return response()->json(['message' => 'User Not Following'], 400);
+    //     }
 
-    }
+    // }
     public function getQuests(Request $request){
         $twitter_id=auth()->user()->twitter_id;
         // $twitter_id=1519637376410206208;
@@ -169,5 +169,19 @@ class UserPointController extends Controller
         //         'status' => 'success',
         //         'quests' => $resource,
         //     ], 200);
+    }
+    function addFollowPoints() {
+        $user_id=auth()->user()->twitter_id;
+        $points_slug="points_for_following";
+        $point=Point::select('id','points')->where('slug',$points_slug)->first();
+        $user_points = UserPoint:: create([
+            'user_id'=>$user_id,
+            'point_id'=>$point->id, 
+        ]);
+        return response()->json([
+            "points"=>$point->points,
+            'message' => 'Points added successfully'
+        ], 201);
+        
     }
 }
