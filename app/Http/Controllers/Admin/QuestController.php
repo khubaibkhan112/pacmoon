@@ -49,14 +49,37 @@ class QuestController extends Controller
     public function store(Request $request)
     {
         $content = $request->input('content');
-
-        $response = $this->twitterService->postTweet($content);
-
+        $quest = new Quest();
+        $message = 'Error posting tweet';
+        if($request->type=='tweet')
+        {
+            $response = $this->twitterService->postTweet($content);
+            if($response['data'])
+            {
+                $quest->content = $request->content;
+                $quest->save();
+                $message = 'Tweet posted successfully';
+            }else{
+                $message = 'User Account Not Available';
+            }
+        }else{
+            $response = $this->twitterService->getUserByName($request->account);
+            if($response['data'])
+            {
+                $quest->account = $request->account;
+                $quest->account_url = $request->account_url;
+                $quest->save();
+                $message = 'Account Shared successfully';
+            }else{
+                $message = 'User Account Not Available';
+            }
+        }
         if (isset($response['data'])) {
-            return response()->json(['success' => true, 'message' => 'Tweet posted successfully']);
+            return response()->json(['success' => true, 'message' => $message]);
         } else {
             return response()->json(['success' => false, 'message' => 'Error posting tweet']);
         }
+
     }
 
     /**

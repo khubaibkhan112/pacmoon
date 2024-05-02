@@ -10,9 +10,18 @@ class HomeController extends Controller
     public function syncUserInformation($request,string $user_id = null)
     {
         $user_id = isset($user_id) ? $user_id : $request->twitter_id;
-        getUserTweets($user_id);
-        SyncUserShareData($user_id);
-        SyncUserLikesData($user_id);
-        SyncUserQuestData($user_id);
+        switch ($slug)
+        {
+            case 'liked_a_quest':
+                SyncUserLikesData($user_id);
+            break;
+            case 'mentioned_mingo_in_tweet':
+                getUserTweets($user_id);
+            break;
+            default :
+                SyncUserQuestData($user_id);
+                getUserTweets($user_id);
+            break;
+        }
     }
 }

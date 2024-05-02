@@ -54,6 +54,13 @@ class TwitterService
         return json_decode($response->getBody(), true);
     }
 
+    public function getUserByName($name)
+    {
+        $response = $this->client->get("/2/users/by/username/{$name}");
+
+        return json_decode($response->getBody(), true);
+    }
+
     public function deleteTweet($tweetId)
     {
         $response = $this->client->delete("/2/tweets/{$tweetId}");
