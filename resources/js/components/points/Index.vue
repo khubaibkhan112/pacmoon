@@ -27,7 +27,10 @@
             <tbody>
               <tr v-for="(obj, index) in points" :key="index">
                 <td>{{ index + 1 }}</td>
-                <td data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)" class="cursor-pointer text-primary">{{ obj.points }}</td>
+                <!-- <td data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)" class="cursor-pointer text-primary">{{ obj.points }}</td> -->
+               <td class="cursor-pointer text-primary" @blur="update($event, obj.id)" 
+    contenteditable="true">{{ obj.points }}</td>
+
                 <td>{{ obj.note }}</td>
                 <!-- <td class="text-center">
                     <a class="cursor-pointer" data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
@@ -86,6 +89,25 @@
           });        
       }
     };
+
+  async function update(event, id) {
+    const editedValue = event.target.innerText.trim(); // Get the edited value from the table cell
+    let url = `/points/${id}`;
+    let method = 'PUT';
+    try {
+        await axios({
+            url: url,
+            method: method,
+            data: { points: editedValue } // Assuming your API expects the points value in the data object
+        });
+        // Optionally, you can handle success here, such as showing a success message
+    } catch (error) {
+        // Handle error
+        this.errorToast(error.response.statusText);
+    }
+}
+
+
 
     async function pointsList() {
         axios({
