@@ -101,7 +101,10 @@ class PointController extends Controller
 
             $points->save();
             DB::commit();
-            return response()->json(['message' => 'Points Updated successfully'], 201);
+            return response()->json([
+                'message' => 'Points Updated successfully',
+                'data' => $points,
+            ], 201);
         } catch (\Exception $exception) {
             DB::rollback();
             return response()->json(['error' => $exception->getMessage()], 500);

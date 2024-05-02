@@ -8,7 +8,7 @@
             <h3 class="mb-2"> Post a Tweet</h3>
           </div>
           <form @submit.prevent="save" id="editUserForm" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework"
-            onsubmit="return false" novalidate="novalidate">    
+            onsubmit="return false" novalidate="novalidate">
             <div class="row">
               <div class="col-12">
                 <div class="mb-3">
@@ -17,9 +17,9 @@
                     <option value="tweet" selected>Tweet</option>
                     <option value="follow">Follow</option>
                   </select>
-                </div>                
+                </div>
               </div>
-            </div>        
+            </div>
             <div class="row" v-if="form.type == 'tweet'">
               <div class="col-12 fv-plugins-icon-container">
                 <div class="form-group">
@@ -48,8 +48,8 @@
                   </div>
                 </div>
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-              </div>    
-              <div class="col-12 fv-plugins-icon-container">  
+              </div>
+              <div class="col-12 fv-plugins-icon-container">
                 <div class="form-group">
                   <div class="w-100">
                     <label class="form-label" for="account_url">Account URL</label>
@@ -57,10 +57,10 @@
                   </div>
                 </div>
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-              </div>                   
+              </div>
             </div>
             <div class="col-12 text-end">
-              <button type="submit" class="btn btn-primary waves-effect waves-light">{{ isEditMode ? 'Update' : 'Post' }}</button>              
+              <button type="submit" class="btn btn-primary waves-effect waves-light">{{ isEditMode ? 'Update' : 'Post' }}</button>
             </div>
             <input type="hidden">
           </form>
@@ -71,7 +71,8 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-const form = ref({  
+import Swal from 'sweetalert2';
+const form = ref({
   type: "tweet",
   content: "",
   user_name: "",
@@ -93,7 +94,7 @@ const loadquestData = (id = null) => {
       getDataForEdit();
   }
 }
-async function save() { 
+async function save() {
   let url = '';
   let method = '';
   if (isEditMode.value) {
@@ -108,6 +109,12 @@ async function save() {
     method: method,
     data: form.value,
   }).then(response => {
+    const message = response.data.message;
+    Swal.fire({
+        icon: 'success',
+        title: message,
+        showConfirmButton: true
+    });
     emit('questsList');
     close();
   }).catch(error => {
@@ -120,7 +127,7 @@ async function getDataForEdit() {
     url: `/quests/${questId.value}/edit`,
     method: 'GET',
   })
-    .then(response => {     
+    .then(response => {
       form.value.content = response.data.content
     })
     .catch(error => {
@@ -134,7 +141,7 @@ function close() {
   emit('close');
 }
 
-function resetValue() {  
+function resetValue() {
   form.value.content = ''
 }
 
