@@ -32,7 +32,7 @@ class UserPointController extends Controller
             return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
-    public function getMingoMentionsData(Request $request)
+    public function getMingoMentionsData()
     {
         // $user = User::where("id",$request->id)->first();
         $user_id=auth()->user()->twitter_id;

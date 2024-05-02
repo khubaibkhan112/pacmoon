@@ -16,11 +16,13 @@ class HomeController extends Controller
                 SyncUserLikesData($user_id);
             break;
             case 'mentioned_mingo_in_tweet':
-                getUserTweets($user_id);
-                break;
+                // getUserTweets($user_id);
+                app('App\Http\Controllers\Api\Admin\UserPointController')->getMingoMentionsData();
+            break;
             default :
-                SyncUserQuestData($user_id);
-                getUserTweets($user_id);
+                // SyncUserQuestData($user_id);
+                // getUserTweets($user_id);
+                app('App\Http\Controllers\Api\Admin\UserPointController')->getMingoMentionsData();
             break;
         }
     }

@@ -45,10 +45,9 @@ function isQuestLiked($id, $quest_id): bool
 {
     // $questids = Quest::select('tweet_id')->pluck('tweet_id')->toArray();
     // $questids = [];
-    if(isset($questids)){
+    
         $pointsService = new TwitterService();
         $data = $pointsService->getUserLikedTweets($id);
-        
         {
             foreach ($data['data'] as $tweet) {
                 if ($tweet['id']== $quest_id){
@@ -56,8 +55,8 @@ function isQuestLiked($id, $quest_id): bool
                 } 
             }
         }
-        return false;
-    }
+       
+    return false;
 
 }
 function SyncUserShareData()
