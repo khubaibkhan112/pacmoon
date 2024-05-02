@@ -17,7 +17,7 @@ class HomeController extends Controller
             break;
             case 'mentioned_mingo_in_tweet':
                 getUserTweets($user_id);
-                break;
+            break;
             default :
                 SyncUserQuestData($user_id);
                 getUserTweets($user_id);

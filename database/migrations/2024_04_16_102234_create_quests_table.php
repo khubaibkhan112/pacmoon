@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('tweet_id');
             $table->longText('content');
+            $table->string('account')->nullable();
+            $table->string('account_url')->nullable();
+            $table->enum('type',[1,0])->comment('1 for  follow account , 0 for post')->default(0);
             $table->longText('user_id')->nullable();
             $table->timestamps();
         });
