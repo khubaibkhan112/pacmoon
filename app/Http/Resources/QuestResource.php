@@ -19,8 +19,10 @@ class QuestResource extends ResourceCollection
                 return [
                     'id' => $item['id'],
                     'content' => $item['content'],
+                    'type' => $item['type'],
                     'tweet_id' => $item['tweet_id'],
                     'quest_liked' => $item['quest_likes_count'] ? true : false,
+                    'quest_retweeted' => $item['quest_retweets_count'] ? true : false,
                     'created_at' => $item['created_at'],
                     'updated_at' => $item['updated_at'],
                 ];
@@ -29,7 +31,7 @@ class QuestResource extends ResourceCollection
                     'id' => $item['id'],
                     'account' => $item['account'],
                     'account_url' => $item['account_url'],
-                    'quest_liked' => $item['quest_likes_count'] ? true : false,
+                    'account_followed' => $item['account_follows_count'] ? true : false,
                     'created_at' => $item['created_at'],
                     'updated_at' => $item['updated_at'],
                 ];

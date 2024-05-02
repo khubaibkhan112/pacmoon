@@ -158,6 +158,10 @@ class UserPointController extends Controller
         // $syncuser= SyncUserLikesData($twitter_id);
         $quests = Quest::withCount(['questLikes' => function ($q) use ($twitter_id) {
             $q->where('user_id', $twitter_id);
+        }])->withCount(['questRetweets' => function ($q) use ($twitter_id) {
+            $q->where('user_id', $twitter_id);
+        }])->withCount(['accountFollows' => function ($q) use ($twitter_id) {
+            $q->where('user_id', $twitter_id);
         }])->get();
         //  dd($quests->get());
         $resource = new QuestResource($quests);
@@ -171,13 +175,15 @@ class UserPointController extends Controller
         //         'quests' => $resource,
         //     ], 200);
     }
-    function addFollowPoints() {
+    function addFollowPoints(Request $request) {
         $user_id=auth()->user()->twitter_id;
+        $quest_id=$request->quest_id;
         $points_slug="points_for_following";
         $point=Point::select('id','points')->where('slug',$points_slug)->first();
         $user_points = UserPoint:: create([
             'user_id'=>$user_id,
             'point_id'=>$point->id, 
+            'quest_id'=>$quest_id
         ]);
         return response()->json([
             "points"=>$point->points,
@@ -197,7 +203,7 @@ class UserPointController extends Controller
         
                 // Check if there are any elements in the filtered array
                 if(!empty($filtered_retweets)) {
-                    $points_slug="points_for_retweet";
+                    $points_slug="points_for_quest_retweet";
                     $point=Point::select('id','points')->where('slug',$points_slug)->first();
                     $user_points = UserPoint:: create([
                         'user_id'=>$user_id,
