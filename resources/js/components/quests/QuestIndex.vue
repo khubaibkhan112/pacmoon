@@ -8,7 +8,7 @@
         <div class="col-9 justify-content-end d-flex">
           <button type="button" class="btn btn-warning theme-button-color module-create-button" data-toggle="modal"
             data-target="#questsModel" @click="openModal()">
-            Add Tweet
+            Add Quest
           </button>
         </div>
       </div>
@@ -31,7 +31,7 @@
                 <td>{{ obj.content }}</td>
                 <td class="text-center">
                     <a class="cursor-quester" data-toggle="modal" data-target="#questsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
-                    <a class="cursor-quester" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>                   
+                    <a class="cursor-quester" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>
                 </td>
               </tr>
             </tbody>
@@ -54,7 +54,7 @@
         quests: {
             type: Array,
             default: () => [],
-        }       
+        }
       });
     onMounted(() => {
         console.log(props.quests);
@@ -80,7 +80,7 @@
           })
           .catch(error => {
             errorToast(error.response.error);
-          });        
+          });
       }
     };
 
@@ -102,5 +102,5 @@
         {
           showModal.value = false
         }
-    }   
+    }
 </script>

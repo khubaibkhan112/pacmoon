@@ -28,13 +28,13 @@
               <tr v-for="(obj, index) in points" :key="index">
                 <td>{{ index + 1 }}</td>
                 <!-- <td data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)" class="cursor-pointer text-primary">{{ obj.points }}</td> -->
-               <td class="cursor-pointer text-primary" @blur="update($event, obj.id)" 
+               <td class="cursor-pointer text-primary" @blur="update($event, obj.id)"
     contenteditable="true">{{ obj.points }}</td>
 
                 <td>{{ obj.note }}</td>
                 <!-- <td class="text-center">
                     <a class="cursor-pointer" data-toggle="modal" data-target="#PointsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
-                    <a class="cursor-pointer" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>                   
+                    <a class="cursor-pointer" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>
                 </td> -->
               </tr>
             </tbody>
@@ -48,6 +48,7 @@
 </template>
 <script setup>
     import PointModel from './PointModel.vue';
+    import Swal from 'sweetalert2';
     import { ref , onMounted , defineProps } from 'vue';
     const showModal = ref(false);
     const objId = ref('');
@@ -86,7 +87,7 @@
           })
           .catch(error => {
             errorToast(error.response.error);
-          });        
+          });
       }
     };
 
@@ -99,10 +100,15 @@
             url: url,
             method: method,
             data: { points: editedValue } // Assuming your API expects the points value in the data object
+        }).then(response => {
+            const message = response.data.message;
+            Swal.fire({
+                icon: 'success',
+                title: message,
+                showConfirmButton: true
+            });
         });
-        // Optionally, you can handle success here, such as showing a success message
     } catch (error) {
-        // Handle error
         this.errorToast(error.response.statusText);
     }
 }
@@ -128,5 +134,5 @@
             showModal.value = false
 
         }
-    }   
+    }
 </script>
