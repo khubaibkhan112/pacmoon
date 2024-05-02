@@ -56,7 +56,7 @@ class TwitterService
 
     public function getUserByName($name)
     {
-        $response = $this->client->get("/2/users/by/username/{$name}");
+        $response = $this->client->get("/2/users/by/username/".$name);
 
         return json_decode($response->getBody(), true);
     }

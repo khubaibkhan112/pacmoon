@@ -63,10 +63,10 @@ class QuestController extends Controller
                 $message = 'User Account Not Available';
             }
         }else{
-            $response = $this->twitterService->getUserByName($request->account);
+            $response = $this->twitterService->getUserByName($request->user_name);
             if($response['data'])
             {
-                $quest->account = $request->account;
+                $quest->account = $request->user_name;
                 $quest->account_url = $request->account_url;
                 $quest->save();
                 $message = 'Account Shared successfully';
