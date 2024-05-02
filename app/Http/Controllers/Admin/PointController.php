@@ -97,7 +97,7 @@ class PointController extends Controller
             $points = Point::findOrFail($id);
 
             $points->points = $request->points;
-            $points->note = $request->note;
+            // $points->note = $request->note;
 
             $points->save();
             DB::commit();
