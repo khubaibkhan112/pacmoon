@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\UserPoint;
 use App\Models\User;
 use App\Models\Quest;
+use App\Services\TwitterService;
 
 class UserPointController extends Controller
 {
@@ -33,8 +34,8 @@ class UserPointController extends Controller
     }
     public function getMingoMentionsData(Request $request)
     {
-        $user = User::where("id",$request->id)->first();
-            $user_id = 1519637376410206208;
+        // $user = User::where("id",$request->id)->first();
+        $user_id=auth()->user()->twitter_id;
             $points_slug = "mentioned_mingo_in_tweet";
         $metioned_ids= getUserTweets($user_id);
            $likedtweets=getMingolikedTweets();
@@ -154,7 +155,7 @@ class UserPointController extends Controller
     public function getQuests(Request $request){
         $twitter_id=auth()->user()->twitter_id;
         // $twitter_id=1519637376410206208;
-        $syncuser= SyncUserLikesData($twitter_id);
+        // $syncuser= SyncUserLikesData($twitter_id);
         $quests = Quest::withCount(['questLikes' => function ($q) use ($twitter_id) {
             $q->where('user_id', $twitter_id);
         }])->get();
@@ -183,5 +184,65 @@ class UserPointController extends Controller
             'message' => 'Points added successfully'
         ], 201);
         
+    }
+    public function addRetweetPoints($id) {
+        $user_id=auth()->user()->twitter_id;
+        $pointsService = new TwitterService();
+        $retweeted_by = $pointsService->getReteweets($id); 
+            if(isset($retweeted_by['data']) && is_array($retweeted_by['data'])) {
+                // Use array_filter to filter the array based on id
+                $filtered_retweets = array_filter($retweeted_by['data'], function($retweet) use ($user_id) {
+                    return $retweet['id'] === $user_id;
+                });
+        
+                // Check if there are any elements in the filtered array
+                if(!empty($filtered_retweets)) {
+                    $points_slug="points_for_retweet";
+                    $point=Point::select('id','points')->where('slug',$points_slug)->first();
+                    $user_points = UserPoint:: create([
+                        'user_id'=>$user_id,
+                        'point_id'=>$point->id, 
+                        'quest_id'=>$id, 
+                    ]);
+                    return  response()->json([
+                        'message'=>'Points added successfully',
+                        "quest_id"=>$id,
+                        "points"=>$point->points,
+                    ],400);
+                }
+            }
+    
+            // If $user_id not found in the retweeted_by data, do something else
+            // For example, return false
+            return response()->json([
+                'message'=>'Tweet not reposted',
+                "quest_id"=>$id
+            ],400);
+         
+        
+    }
+    public function addQuestLikedpoints($id)  {
+        $user_id=auth()->user()->twitter_id;
+
+        $points_slug = "liked_a_quest";
+        $point=Point::select('id','points')->where('slug',$points_slug)->first();
+        // $isQuestLiked = new TwitterService();
+        $retweeted_by = isQuestLiked($user_id,$id);
+        if($retweeted_by){
+            $user_points = UserPoint:: create([
+                'user_id'=>$user_id,
+                'point_id'=>$point->id, 
+            ]);
+            return response()->json([
+                "points"=>$point->points,
+                "quest_id"=>$id,
+                'message' => 'Points added successfully'
+            ], 201);
+        } else{
+            return response()->json([
+                "quest_id"=>$id,
+                'message' => 'Quest is not liked'
+            ], 201);
+        }
     }
 }

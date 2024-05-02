@@ -93,5 +93,11 @@ class TwitterService
         return json_decode($response->getBody(), true);
     }
 
+    public function getReteweets($id){
+            // 2/tweets/:id/retweeted_by
+            $response = $this->client->get('/2/tweets/'. $id .'/retweeted_by');
+            return json_decode($response->getBody(), true);
+    }
+
 
 }
