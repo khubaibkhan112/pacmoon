@@ -54,18 +54,21 @@ class UserPointController extends Controller
                         'tweet_id'=>$tweet['id'],
                         'total_count'=>$metioned_ids[$tweet['id']]['points_for_views'],
                         'point_id'=>0,
+                        'user_points'=>0
                     ];
                     $points_metrics['points_for_retweets'][]=[
                         'user_id'=>$user_id,
                         'tweet_id'=>$tweet['id'],
                         'total_count'=>$metioned_ids[$tweet['id']]['points_for_retweets'],
                         'point_id'=>0,
+                        'user_points'=>0
                     ];
                     $points_metrics['points_for_like'][]=[
                         'user_id'=>$user_id,
                         'tweet_id'=>$tweet['id'],
                         'total_count'=>$metioned_ids[$tweet['id']]['points_for_like'],
                         'point_id'=>0,
+                        'user_points'=>0
                     ];
 
                 }
@@ -79,51 +82,51 @@ class UserPointController extends Controller
         }
         // try {
             // $user = User::where("id",$request->id)->first();
-            $user_id = auth()->user()->twitter_id;
-            $points_slug = "mentioned_mingo_in_tweet";
+        //     $user_id = auth()->user()->twitter_id;
+        //     $points_slug = "mentioned_mingo_in_tweet";
 
-            // $syncuser= SyncUserLikesData($user_id);
+        //     // $syncuser= SyncUserLikesData($user_id);
 
-           $metioned_ids= getUserTweets($user_id);
-           $likedtweets=getMingolikedTweets();
-        //    dd($likedtweets);
-        $tweet_ids=[];
+        //    $metioned_ids= getUserTweets($user_id);
+        //    $likedtweets=getMingolikedTweets();
+        // //    dd($likedtweets);
+        // $tweet_ids=[];
         // dd($likedtweets,$metioned_ids);
 
 
         // dd($points);
-        $points_metrics=[];
-           foreach($likedtweets as $tweet){
-                if(isset($metioned_ids[$tweet['id']])){
-                    array_push($tweet_ids, $tweet['id']);
-                    $points_metrics['points_for_views'][]=[
-                        'user_id'=>$user_id,
-                        'tweet_id'=>$tweet['id'],
-                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_views'],
-                        'point_id'=>0,
-                    ];
-                    $points_metrics['points_for_retweets'][]=[
-                        'user_id'=>$user_id,
-                        'tweet_id'=>$tweet['id'],
-                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_retweets'],
-                        'point_id'=>0,
-                    ];
-                    $points_metrics['points_for_like'][]=[
-                        'user_id'=>$user_id,
-                        'tweet_id'=>$tweet['id'],
-                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_like'],
-                        'point_id'=>0,
-                    ];
+        // $points_metrics=[];
+        //    foreach($likedtweets as $tweet){
+        //         if(isset($metioned_ids[$tweet['id']])){
+        //             array_push($tweet_ids, $tweet['id']);
+        //             $points_metrics['points_for_views'][]=[
+        //                 'user_id'=>$user_id,
+        //                 'tweet_id'=>$tweet['id'],
+        //                 'total_count'=>$metioned_ids[$tweet['id']]['points_for_views'],
+        //                 'point_id'=>0,
+        //             ];
+        //             $points_metrics['points_for_retweets'][]=[
+        //                 'user_id'=>$user_id,
+        //                 'tweet_id'=>$tweet['id'],
+        //                 'total_count'=>$metioned_ids[$tweet['id']]['points_for_retweets'],
+        //                 'point_id'=>0,
+        //             ];
+        //             $points_metrics['points_for_like'][]=[
+        //                 'user_id'=>$user_id,
+        //                 'tweet_id'=>$tweet['id'],
+        //                 'total_count'=>$metioned_ids[$tweet['id']]['points_for_like'],
+        //                 'point_id'=>0,
+        //             ];
 
-                }
-           }
+        //         }
+        //    }
 
-           if (count($tweet_ids)) {
-            $user_points = new UserPoint;
-            $user_points->addPoints($user_id, $points_slug, $tweet_ids, $is_quest=false);
-            $metrics_points = new UserPoint;
-            $metrics_points->addMetricPoints($points_metrics,$tweet_ids,$user_id);
-        }
+        //    if (count($tweet_ids)) {
+        //     $user_points = new UserPoint;
+        //     $user_points->addPoints($user_id, $points_slug, $tweet_ids, $is_quest=false);
+        //     $metrics_points = new UserPoint;
+        //     $metrics_points->addMetricPoints($points_metrics,$tweet_ids,$user_id);
+        //     }
 
 
             return response()->json(['message' => 'Points added successfully'], 201);
@@ -183,7 +186,8 @@ class UserPointController extends Controller
         $user_points = UserPoint:: create([
             'user_id'=>$user_id,
             'point_id'=>$point->id, 
-            'quest_id'=>$quest_id
+            'quest_id'=>$quest_id,
+            'user_points'=>$point->points
         ]);
         return response()->json([
             "points"=>$point->points,
@@ -209,6 +213,7 @@ class UserPointController extends Controller
                         'user_id'=>$user_id,
                         'point_id'=>$point->id, 
                         'quest_id'=>$id, 
+                        'user_points'=>$point->points
                     ]);
                     return  response()->json([
                         'message'=>'Points added successfully',
@@ -238,6 +243,7 @@ class UserPointController extends Controller
             $user_points = UserPoint:: create([
                 'user_id'=>$user_id,
                 'point_id'=>$point->id, 
+                'user_points'=>$point->points
             ]);
             return response()->json([
                 "points"=>$point->points,

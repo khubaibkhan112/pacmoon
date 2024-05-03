@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('tweet_id')->nullable();
             $table->unsignedBigInteger('for_account')->nullable();
             $table->unsignedBigInteger('total_count')->default(1);
+            $table->unsignedBigInteger('user_points')->default(0);
             $table->softDeletes('deleted_at', precision: 0);
             $table->timestamps();
         });

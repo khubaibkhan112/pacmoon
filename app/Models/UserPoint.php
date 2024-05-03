@@ -13,9 +13,12 @@ class UserPoint extends Model
         'user_id',
         'quest_id',
         'tweet_id',
+        'user_points',
+        'for_account',
+        'total_count',
     ];
     public function addPoints($user_id,$points_slug,$quest_id=Null,$is_quest=true){
-        $point=Point::select('id')->where('slug',$points_slug)->first();
+        $point=Point::select('id','points')->where('slug',$points_slug)->first();
 
         $quest_or_tweet=$quest_id;
 
@@ -31,6 +34,7 @@ class UserPoint extends Model
                     'user_id'=>$user_id,
                     'point_id'=>$point->id,
                      $where=>$tweet,
+                     'user_points'=>$point->points
                 ]
                );
         }
@@ -49,16 +53,17 @@ class UserPoint extends Model
         foreach($points as $point){
             $slug=$point['slug'];
             $slug_data= $data[$slug];
-             $metric_points=$this->updatePointId($slug_data,$point['id']);
+             $metric_points=$this->updatePointId($slug_data,$point['id'],$point['points']);
              $points_data = array_merge($points_data, $metric_points);
         }
         if(count($points_data)) $user_points_row=self::insert($points_data);
     }
-    function updatePointId($data,$pointId) {
+    function updatePointId($data,$pointId,$points) {
         
-        $updatedArray = array_map(function($item) use ($pointId) {
+        $updatedArray = array_map(function($item) use ($pointId,$points) {
             if ($item['total_count'] != 0) {
                 $item['point_id'] = $pointId; // Change 'point_id' to the passed point value
+                $item['user_points'] = (int)$points * (int)$item['total_count']; // Change 'point_id' to the passed point value
                 return $item;
             } else {
                 return null; // Return null for items with total_count equal to zero
@@ -70,7 +75,10 @@ class UserPoint extends Model
         return $updatedArray;
     }
     public function point(){
-        return $this->belongsTo(Point::class)->select('id','slug','points');
+        return $this->belongsTo(Point::class)->select('id','slug','points','user_points');
+    }
+    public function points(){
+        return $this->belongsTo(Point::class)->select('id','slug','points','user_points');
     }
 // Use array_map to apply the function to each element of the array
 }

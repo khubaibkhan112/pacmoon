@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quest extends Model
 {
+    protected $fillable = [
+        'tweet_id',
+        'content',
+        'account',
+        'account_url',
+        'type',
+        'user_id',
+        ];
     use HasFactory;
     public function questLikes(){
         return $this->hasMany(UserPoint::class,'quest_id','tweet_id')->where('point_id',1);

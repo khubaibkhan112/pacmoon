@@ -46,4 +46,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function points(){
+        return $this->hasMany(UserPoint::class,'user_id','twitter_id');
+    }
 }
