@@ -16,10 +16,10 @@ function SyncUserQuestData()
 }
 function SyncUserLikesData($id, $is_quest = true,)
 {
-    $pointsService = new TwitterService();
     $questids = Quest::select('tweet_id')->pluck('tweet_id')->toArray();
     $questids = [];
     if(isset($questids)){
+        $pointsService = new TwitterService();
         $data = $pointsService->getUserLikedTweets($id);
         $points_slug = "liked_a_quest";
         foreach ($data['data'] as $tweet) {
@@ -39,6 +39,24 @@ function SyncUserLikesData($id, $is_quest = true,)
     //Logic for Assigning User Points Based on Response. And Status of User form
 
     //Update Database
+
+}
+function isQuestLiked($id, $quest_id): bool
+{
+    // $questids = Quest::select('tweet_id')->pluck('tweet_id')->toArray();
+    // $questids = [];
+    
+        $pointsService = new TwitterService();
+        $data = $pointsService->getUserLikedTweets($id);
+        {
+            foreach ($data['data'] as $tweet) {
+                if ($tweet['id']== $quest_id){
+                    return true;
+                } 
+            }
+        }
+       
+    return false;
 
 }
 function SyncUserShareData()

@@ -58,18 +58,19 @@ class QuestController extends Controller
             {
                 $quest->content = $request->content;
                 $quest->save();
-                $message = 'Tweet posted successfully';
+                $message = 'Quest Added successfully';
             }else{
-                $message = 'User Account Not Available';
+                $message = 'Cant post a tweet';
             }
         }else{
             $response = $this->twitterService->getUserByName($request->user_name);
-            if($response['data'])
+            if(isset($response['data']))
             {
                 $quest->account = $request->user_name;
                 $quest->account_url = $request->account_url;
+                $quest->type = $request->type;
                 $quest->save();
-                $message = 'Account Shared successfully';
+                $message = 'Quest Added successfully';
             }else{
                 $message = 'User Account Not Available';
             }
@@ -77,7 +78,7 @@ class QuestController extends Controller
         if (isset($response['data'])) {
             return response()->json(['success' => true, 'message' => $message]);
         } else {
-            return response()->json(['success' => false, 'message' => 'Error posting tweet']);
+            return response()->json(['success' => false, 'message' => $message]);
         }
 
     }

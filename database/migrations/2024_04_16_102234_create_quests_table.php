@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('quests', function (Blueprint $table) {
             $table->id();
-            $table->string('tweet_id');
-            $table->longText('content');
+            $table->string('tweet_id')->nullable();
+            $table->longText('content')->nullable();
             $table->string('account')->nullable();
             $table->string('account_url')->nullable();
-            $table->enum('type',[1,0])->comment('1 for  follow account , 0 for post')->default(0);
+            $table->string('type')->comment('Tweet OR Account')->default('tweet');
             $table->longText('user_id')->nullable();
             $table->timestamps();
         });
