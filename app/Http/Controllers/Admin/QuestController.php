@@ -53,6 +53,7 @@ class QuestController extends Controller
         $message = 'Error posting tweet';
         if($request->type=='tweet')
         {
+            
             $response = $this->twitterService->postTweet($content);
             if($response['data'])
             {
