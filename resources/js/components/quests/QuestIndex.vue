@@ -19,8 +19,9 @@
             <thead>
               <tr>
                 <th>#</th>
+                <th class="text-nowrap">Type</th>
+                <th class="text-nowrap" >Tweet ID</th>
                 <th class="text-nowrap">Tweet ID</th>
-                <th class="text-nowrap">Tweet</th>
                 <th class="text-nowrap text-center">Action</th>
               </tr>
             </thead>
@@ -28,9 +29,9 @@
               <tr v-for="(obj, index) in quests" :key="index">
                 <td>{{ index + 1 }}</td>
                 <td>{{ obj.tweet_id }}</td>
-                <td>{{ obj.content }}</td>
+                <td></td>
                 <td class="text-center">
-                    <a class="cursor-quester" data-toggle="modal" data-target="#questsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a>
+                    <!-- <a class="cursor-quester" data-toggle="modal" data-target="#questsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a> -->
                     <a class="cursor-quester" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>
                 </td>
               </tr>
