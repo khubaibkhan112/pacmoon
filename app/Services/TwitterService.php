@@ -43,7 +43,7 @@ class TwitterService
     //     return json_decode($response->getBody(), true);
     // }
 
-    public function postTweet($tweetText)
+    public function postTweet($tweetText, $filePaths = [])
     {
         $response = $this->client->post('/2/tweets', [
             'json' => [

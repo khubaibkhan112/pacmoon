@@ -28,7 +28,7 @@ class HomeController extends Controller
         }
     }
     public function getLeaderBoardData()  {
-        $users = User::select('id', 'twitter_id', 'name')
+        $users = User::select('id', 'twitter_id', 'name','profile_img')
         ->withSum('points', 'user_points')
         ->whereNotNull('twitter_id')
         ->orderByDesc('points_sum_user_points')
