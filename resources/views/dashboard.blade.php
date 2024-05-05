@@ -1,10 +1,9 @@
 @extends('layouts.master')
 @section('content')
 
-<dashboard :users_count="{{ $users_count }}" :quests="{{ $quests }}" :tweetts_like_count="{{ $tweetts_like_count }}" :mentions_count="{{ $mentions_count }}"></dashboard>
+<dashboard :users_count="{{ $users_count }}" :quests="{{ $quests }}" :tweetts_like_count="{{ $tweetts_like_count }}" :mentions_count="{{ $mentions_count }}" :leaderboard="{{$user_leader_board}}"></dashboard>
 
 @endsection
 @push('scripts')
-
-<script src="{{asset('backend/js/app-ecommerce-customer-all.js')}}"></script>
+<script src="{{asset('assets/js/dashboards-analytics.js')}}"></script>
 @endpush

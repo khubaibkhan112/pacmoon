@@ -14,6 +14,7 @@ class Quest extends Model
         'account_url',
         'type',
         'user_id',
+        'profile_image_url',
         ];
     use HasFactory;
     public function questLikes(){

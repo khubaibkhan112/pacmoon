@@ -72,26 +72,89 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 mb-4">
-                <div class="card">
-                <div class="card-header header-elements">
-                    <div>
-                    <h5 class="card-title mb-0">Statistics</h5>
-                    <small class="text-muted">Commercial networks and enterprises</small>
+            <!-- Weekly Reports -->
+            <div class="col-lg-6 mb-4">
+                  <div class="card h-100">
+                    <div class="card-header pb-0 d-flex justify-content-between mb-lg-n4">
+                      <div class="card-title mb-0">
+                        <h5 class="mb-0">Weekly Reports</h5>
+                        <small class="text-muted">Weekly  Overview</small>
+                      </div>
+                      <!-- <div class="dropdown">
+                        <button
+                          class="btn p-0"
+                          type="button"
+                          id="earningReportsId"
+                          data-bs-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false">
+                          <i class="ti ti-dots-vertical ti-sm text-muted"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="earningReportsId">
+                          <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                          <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                        </div>
+                      </div> -->
+                      <!-- </div> -->
                     </div>
-                    <div class="card-header-elements ms-auto py-0">
-                    <h5 class="mb-0 me-3">$ 78,000</h5>
-                    <span class="badge bg-label-secondary">
-                        <i class="ti ti-arrow-up ti-xs text-success"></i>
-                        <span class="align-middle">37%</span>
-                    </span>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-12 col-md-8">
+                          <div id="weeklyEarningReports"></div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
-                <div class="card-body pt-2">
-                    <canvas id="lineChart" class="chartjs" data-height="500"></canvas>
+                <!--/ Weekly Reports -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                  <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between">
+                      <h5 class="card-title m-0 me-2">LeaderBoard</h5>
+                      <!-- <div class="dropdown">
+                        <button class="btn p-0" type="button" id="teamMemberList" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="ti ti-dots-vertical ti-sm text-muted"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="teamMemberList">
+                          <a class="dropdown-item" href="javascript:void(0);">Download</a>
+                          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+                          <a class="dropdown-item" href="javascript:void(0);">Share</a>
+                        </div>
+                      </div> -->
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table table-borderless border-top">
+                        <thead class="border-bottom">
+                          <tr>
+                            <th>Postion</th>
+                            <th>Username</th>
+                            <th>Points</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <tr v-for="(obj, index) in leaderboard" :key="index">
+                            <td>{{ getOrdinal(index + 1) }}</td>
+                            <td>
+                              <div class="d-flex justify-content-start align-items-center">
+                                <div class="me-1">
+                                  <img :src="obj.profile_img" class="rounded-circle me-1" alt="Visa" height="30"></br>
+                                </div>
+                                <div class="d-flex flex-column">
+                                  <p class="mb-0 fw-medium">{{ obj.name }}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <p class="mb-0 fw-medium">{{ obj.points_sum_user_points ?? 0 }}</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-                </div>
-            </div>
+
         </div>
     </div>
   </div>  
@@ -118,6 +181,10 @@
         mentions_count: {
             type : Number,
             default: 0
+        },
+        leaderboard: {
+            type: Array,
+            default: () => [],
         }
         });
     onMounted(() => {
@@ -167,4 +234,15 @@
 
         }
     }   
+    function  getOrdinal(number) {
+        const suffixes = ["st", "nd", "rd"];
+        const remainderTen = number % 10;
+        const remainderHundred = number % 100;
+
+        if (remainderTen <= 3 && remainderHundred !== 11 && remainderHundred !== 12 && remainderHundred !== 13) {
+            return number + suffixes[remainderTen - 1];
+        } else {
+            return number + "th";
+        }
+    }
 </script>

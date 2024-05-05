@@ -23,10 +23,11 @@
     <script src="{{asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js')}}"></script>
     <script src="{{asset('assets/vendor/libs/cleavejs/cleave.js')}}"></script>
     <script src="{{asset('assets/vendor/libs/cleavejs/cleave-phone.js')}}"></script>
-
+    <script src="{{asset('assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
     <!-- Main JS -->
     <script src="{{asset('assets/js/main.js')}}"></script>
 
     <!-- Page JS -->
     <script src="{{asset('assets/js/app-user-list.js')}}"></script>
+
     @stack('scripts')

@@ -21,7 +21,7 @@ class UserPointController extends Controller
             $user_id = auth()->user()->twitter_id;
 
 
-             $syncuser= SyncUserLikesData($user_id);
+            $syncuser = SyncUserLikesData($user_id);
 
 
 
@@ -35,53 +35,53 @@ class UserPointController extends Controller
     public function getMingoMentionsData()
     {
         // $user = User::where("id",$request->id)->first();
-        $user_id=auth()->user()->twitter_id;
-            $points_slug = "mentioned_mingo_in_tweet";
-        $metioned_ids= getUserTweets($user_id);
-           $likedtweets=getMingolikedTweets();
+        $user_id = auth()->user()->twitter_id;
+        $points_slug = "mentioned_mingo_in_tweet";
+        $metioned_ids = getUserTweets($user_id);
+        $likedtweets = getMingolikedTweets();
         //    dd($likedtweets);
-        $tweet_ids=[];
+        $tweet_ids = [];
         // dd($likedtweets,$metioned_ids);
 
 
         // dd($points);
-        $points_metrics=[];
-           foreach($likedtweets as $tweet){
-                if(isset($metioned_ids[$tweet['id']])){
-                    array_push($tweet_ids, $tweet['id']);
-                    $points_metrics['points_for_views'][]=[
-                        'user_id'=>$user_id,
-                        'tweet_id'=>$tweet['id'],
-                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_views'],
-                        'point_id'=>0,
-                        'user_points'=>0
-                    ];
-                    $points_metrics['points_for_retweets'][]=[
-                        'user_id'=>$user_id,
-                        'tweet_id'=>$tweet['id'],
-                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_retweets'],
-                        'point_id'=>0,
-                        'user_points'=>0
-                    ];
-                    $points_metrics['points_for_like'][]=[
-                        'user_id'=>$user_id,
-                        'tweet_id'=>$tweet['id'],
-                        'total_count'=>$metioned_ids[$tweet['id']]['points_for_like'],
-                        'point_id'=>0,
-                        'user_points'=>0
-                    ];
+        $points_metrics = [];
+        foreach ($likedtweets as $tweet) {
+            if (isset($metioned_ids[$tweet['id']])) {
+                array_push($tweet_ids, $tweet['id']);
+                $points_metrics['points_for_views'][] = [
+                    'user_id' => $user_id,
+                    'tweet_id' => $tweet['id'],
+                    'total_count' => $metioned_ids[$tweet['id']]['points_for_views'],
+                    'point_id' => 0,
+                    'user_points' => 0
+                ];
+                $points_metrics['points_for_retweets'][] = [
+                    'user_id' => $user_id,
+                    'tweet_id' => $tweet['id'],
+                    'total_count' => $metioned_ids[$tweet['id']]['points_for_retweets'],
+                    'point_id' => 0,
+                    'user_points' => 0
+                ];
+                $points_metrics['points_for_like'][] = [
+                    'user_id' => $user_id,
+                    'tweet_id' => $tweet['id'],
+                    'total_count' => $metioned_ids[$tweet['id']]['points_for_like'],
+                    'point_id' => 0,
+                    'user_points' => 0
+                ];
 
-                }
-           }
+            }
+        }
 
-           if (count($tweet_ids)) {
+        if (count($tweet_ids)) {
             $user_points = new UserPoint;
-            $user_points->addPoints($user_id, $points_slug, $tweet_ids, $is_quest=false);
+            $user_points->addPoints($user_id, $points_slug, $tweet_ids, $is_quest = false);
             $metrics_points = new UserPoint;
-            $metrics_points->addMetricPoints($points_metrics,$tweet_ids,$user_id);
+            $metrics_points->addMetricPoints($points_metrics, $tweet_ids, $user_id);
         }
         // try {
-            // $user = User::where("id",$request->id)->first();
+        // $user = User::where("id",$request->id)->first();
         //     $user_id = auth()->user()->twitter_id;
         //     $points_slug = "mentioned_mingo_in_tweet";
 
@@ -129,7 +129,7 @@ class UserPointController extends Controller
         //     }
 
 
-            return response()->json(['message' => 'Points added successfully'], 201);
+        return response()->json(['message' => 'Points added successfully'], 201);
         // } catch (\Exception $exception) {
         //     DB::rollback();
         //     return response()->json(['error' => $exception->getMessage()], 500);
@@ -155,104 +155,124 @@ class UserPointController extends Controller
     //     }
 
     // }
-    public function getQuests(Request $request){
-        $twitter_id=auth()->user()->twitter_id;
+    public function getQuests(Request $request)
+    {
+        $twitter_id = auth()->user()->twitter_id;
         // $twitter_id=1519637376410206208;
         // $syncuser= SyncUserLikesData($twitter_id);
-        $quests = Quest::withCount(['questLikes' => function ($q) use ($twitter_id) {
-            $q->where('user_id', $twitter_id);
-        }])->withCount(['questRetweets' => function ($q) use ($twitter_id) {
-            $q->where('user_id', $twitter_id);
-        }])->withCount(['accountFollows' => function ($q) use ($twitter_id) {
-            $q->where('user_id', $twitter_id);
-        }])->get();
+        $quests = Quest::withCount([
+            'questLikes' => function ($q) use ($twitter_id) {
+                $q->where('user_id', $twitter_id);
+            }
+        ])->withCount([
+                    'questRetweets' => function ($q) use ($twitter_id) {
+                        $q->where('user_id', $twitter_id);
+                    }
+                ])->withCount([
+                    'accountFollows' => function ($q) use ($twitter_id) {
+                        $q->where('user_id', $twitter_id);
+                    }
+                ])->get();
+
+        $groupedData = $quests->groupBy('type');
+
+        // Rename keys according to 'type' column
+        $renamedData = $groupedData->mapWithKeys(function ($item, $key) {
+            return [$key => $item->toArray()];
+        });
+
+        // You can then access 'tweet' and 'follow' groups separately
+        $tweets = $renamedData->get('tweet');
+        $follows = $renamedData->get('follow');
         //  dd($quests->get());
-        $resource = new QuestResource($quests);
-            return response()->json([
-                'status' => 'success',
-                'quests' => $resource,
-            ], 200);
-        // $resource = QuestResource::collection($quests->get());
-        //     return response()->json([
-        //         'status' => 'success',
-        //         'quests' => $resource,
-        //     ], 200);
+        $tweets = new QuestResource($tweets);
+        $follows = new QuestResource($follows);
+        return response()->json([
+            'status' => 'success',
+            'quests' => [
+                'tweets' => $tweets,
+                'follows' => $follows,
+            ],
+        ], 200);
     }
-    function addFollowPoints(Request $request) {
-        $user_id=auth()->user()->twitter_id;
-        $quest_id=$request->quest_id;
-        $points_slug="points_for_following";
-        $point=Point::select('id','points')->where('slug',$points_slug)->first();
-        $user_points = UserPoint:: create([
-            'user_id'=>$user_id,
-            'point_id'=>$point->id, 
-            'quest_id'=>$quest_id,
-            'user_points'=>$point->points
+    function addFollowPoints(Request $request)
+    {
+        $user_id = auth()->user()->twitter_id;
+        $quest_id = $request->quest_id;
+        $points_slug = "points_for_following";
+        $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
+        $user_points = UserPoint::create([
+            'user_id' => $user_id,
+            'point_id' => $point->id,
+            'quest_id' => $quest_id,
+            'user_points' => $point->points
         ]);
         return response()->json([
-            "points"=>$point->points,
+            "points" => $point->points,
             'message' => 'Points added successfully'
         ], 201);
-        
+
     }
-    public function addRetweetPoints($id) {
-        $user_id=auth()->user()->twitter_id;
+    public function addRetweetPoints($id)
+    {
+        $user_id = auth()->user()->twitter_id;
         $pointsService = new TwitterService();
-        $retweeted_by = $pointsService->getReteweets($id); 
-            if(isset($retweeted_by['data']) && is_array($retweeted_by['data'])) {
-                // Use array_filter to filter the array based on id
-                $filtered_retweets = array_filter($retweeted_by['data'], function($retweet) use ($user_id) {
-                    return $retweet['id'] === $user_id;
-                });
-        
-                // Check if there are any elements in the filtered array
-                if(!empty($filtered_retweets)) {
-                    $points_slug="points_for_quest_retweet";
-                    $point=Point::select('id','points')->where('slug',$points_slug)->first();
-                    $user_points = UserPoint:: create([
-                        'user_id'=>$user_id,
-                        'point_id'=>$point->id, 
-                        'quest_id'=>$id, 
-                        'user_points'=>$point->points
-                    ]);
-                    return  response()->json([
-                        'message'=>'Points added successfully',
-                        "quest_id"=>$id,
-                        "points"=>$point->points,
-                    ],400);
-                }
+        $retweeted_by = $pointsService->getReteweets($id);
+        if (isset($retweeted_by['data']) && is_array($retweeted_by['data'])) {
+            // Use array_filter to filter the array based on id
+            $filtered_retweets = array_filter($retweeted_by['data'], function ($retweet) use ($user_id) {
+                return $retweet['id'] === $user_id;
+            });
+
+            // Check if there are any elements in the filtered array
+            if (!empty($filtered_retweets)) {
+                $points_slug = "points_for_quest_retweet";
+                $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
+                $user_points = UserPoint::create([
+                    'user_id' => $user_id,
+                    'point_id' => $point->id,
+                    'quest_id' => $id,
+                    'user_points' => $point->points
+                ]);
+                return response()->json([
+                    'message' => 'Points added successfully',
+                    "quest_id" => $id,
+                    "points" => $point->points,
+                ], 400);
             }
-    
-            // If $user_id not found in the retweeted_by data, do something else
-            // For example, return false
-            return response()->json([
-                'message'=>'Tweet not reposted',
-                "quest_id"=>$id
-            ],400);
-         
-        
+        }
+
+        // If $user_id not found in the retweeted_by data, do something else
+        // For example, return false
+        return response()->json([
+            'message' => 'Tweet not reposted',
+            "quest_id" => $id
+        ], 400);
+
+
     }
-    public function addQuestLikedpoints($id)  {
-        $user_id=auth()->user()->twitter_id;
+    public function addQuestLikedpoints($id)
+    {
+        $user_id = auth()->user()->twitter_id;
 
         $points_slug = "liked_a_quest";
-        $point=Point::select('id','points')->where('slug',$points_slug)->first();
+        $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
         // $isQuestLiked = new TwitterService();
-        $retweeted_by = isQuestLiked($user_id,$id);
-        if($retweeted_by){
-            $user_points = UserPoint:: create([
-                'user_id'=>$user_id,
-                'point_id'=>$point->id, 
-                'user_points'=>$point->points
+        $retweeted_by = isQuestLiked($user_id, $id);
+        if ($retweeted_by) {
+            $user_points = UserPoint::create([
+                'user_id' => $user_id,
+                'point_id' => $point->id,
+                'user_points' => $point->points
             ]);
             return response()->json([
-                "points"=>$point->points,
-                "quest_id"=>$id,
+                "points" => $point->points,
+                "quest_id" => $id,
                 'message' => 'Points added successfully'
             ], 201);
-        } else{
+        } else {
             return response()->json([
-                "quest_id"=>$id,
+                "quest_id" => $id,
                 'message' => 'Quest is not liked'
             ], 201);
         }
