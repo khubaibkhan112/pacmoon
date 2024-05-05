@@ -6,7 +6,7 @@
 
 (function () {
   let cardColor, headingColor, labelColor, borderColor, legendColor;
-
+  var isDarkStyle = false;
   if (isDarkStyle) {
     cardColor = config.colors_dark.cardColor;
     headingColor = config.colors_dark.headingColor;

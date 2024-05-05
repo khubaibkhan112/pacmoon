@@ -56,8 +56,7 @@ class TwitterService
 
     public function getUserByName($name)
     {
-        $response = $this->client->get("/2/users/by/username/".$name);
-
+        $response = $this->client->get("/2/users/by/username/".$name .'?user.fields=id,username,name,profile_image_url');
         return json_decode($response->getBody(), true);
     }
 

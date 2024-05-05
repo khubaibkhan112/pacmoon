@@ -70,6 +70,7 @@ class QuestController extends Controller
                 $quest->account = $request->user_name;
                 $quest->account_url = $request->account_url;
                 $quest->type = $request->type;
+                $quest->profile_url = $response['data']['profile_image_url'];
                 $quest->save();
                 $message = 'Quest Added successfully';
             }else{

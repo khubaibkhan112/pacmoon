@@ -31,6 +31,7 @@ class HomeController extends Controller
         $users = User::select('id', 'twitter_id', 'name','profile_img')
         ->withSum('points', 'user_points')
         ->whereNotNull('twitter_id')
+        ->where('twitter_id','<>',0)
         ->orderByDesc('points_sum_user_points')
         ->get();
     

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->longText('content')->nullable();
             $table->string('account')->nullable();
             $table->string('account_url')->nullable();
+            $table->string('profile_url')->nullable();
             $table->string('type')->comment('Tweet OR Account')->default('tweet');
             $table->longText('user_id')->nullable();
             $table->timestamps();

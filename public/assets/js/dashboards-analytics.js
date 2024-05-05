@@ -6,6 +6,7 @@
 
 (function () {
   let cardColor, headingColor, labelColor, shadeColor, grayColor;
+  var isDarkStyle = false;
   if (isDarkStyle) {
     cardColor = config.colors_dark.cardColor;
     labelColor = config.colors_dark.textMuted;
