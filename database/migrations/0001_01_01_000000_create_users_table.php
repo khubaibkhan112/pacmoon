@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('is_valid')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->boolean('is_referred_user')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

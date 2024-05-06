@@ -21,4 +21,7 @@ Route::get('/addfollowpoints',[UserPointController::class, 'addFollowPoints']);
 Route::get('/addretweetpoints/{tweet_id}',[UserPointController::class, 'addRetweetPoints']);
 Route::get('/questlikepoints/{tweet_id}',[UserPointController::class, 'addQuestLikedpoints']);
 Route::get('/leaderboard',[HomeController::class, 'getLeaderBoardData']);
+Route::get('/leaderboard',[HomeController::class, 'getLeaderBoardData']);
+Route::get('/savecode',[HomeController::class, 'saveReferral']);
+
 });

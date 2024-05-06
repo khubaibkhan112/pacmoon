@@ -20,6 +20,9 @@ return new class extends Migration
             $table->unsignedBigInteger('for_account')->nullable();
             $table->unsignedBigInteger('total_count')->default(1);
             $table->unsignedBigInteger('user_points')->default(0);
+            $table->string('for_account')->default(0);
+            $table->unsignedBigInteger('referred_by')->nullable();
+            $table->unsignedBigInteger('referred_id')->nullable();
             $table->softDeletes('deleted_at', precision: 0);
             $table->timestamps();
         });

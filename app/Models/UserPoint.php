@@ -16,6 +16,9 @@ class UserPoint extends Model
         'user_points',
         'for_account',
         'total_count',
+        'for_account',
+        'referred_by',
+        'referred_id',
     ];
     public function addPoints($user_id,$points_slug,$quest_id=Null,$is_quest=true){
         $point=Point::select('id','points')->where('slug',$points_slug)->first();
