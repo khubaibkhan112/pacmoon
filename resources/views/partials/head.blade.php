@@ -31,18 +31,17 @@
   <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css')}}" />
   <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css')}}" />
   <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css')}}" />
+  <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}" />
   <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
   <link rel="stylesheet" href="{{asset('assets/vendor/libs/@form-validation/umd/styles/index.min.css')}}" />
 
   <!-- Page CSS -->
 
-  <!-- Helpers -->
   <script src="{{asset('assets/vendor/js/helpers.js')}}"></script>
-  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-  <script src="{{asset('assets/js/config.js')}}"></script>
-  <script src="{{asset('assets/vendor/libs/chartjs/chartjs.js')}}"></script>
-  <script src="{{asset('assets/js/main.js')}}"></script>
-  <script src="{{asset('assets/js/charts-chartjs.js')}}"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    {{-- <script src="{{asset('assets/vendor/js/template-customizer.js')}}"></script> --}}
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{{asset('assets/js/config.js')}}"></script>
   @stack('scripts')
 </head>
