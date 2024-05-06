@@ -7,7 +7,7 @@
   <meta name="description" content="" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon/favicon.ico')}}" />
+  <link rel="icon" type="image/x-icon" href="https://pbs.twimg.com/profile_images/1469866962645880834/-uD_orAt_normal.jpg" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
