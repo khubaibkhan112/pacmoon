@@ -114,6 +114,7 @@
 
   // Earning Reports Bar Chart
   // --------------------------------------------------------------------
+  document.addEventListener('DOMContentLoaded', function() {
   const weeklyEarningReportsEl = document.querySelector('#weeklyEarningReports'),
     weeklyEarningReportsConfig = {
       chart: {
@@ -198,11 +199,12 @@
         }
       ]
     };
+    // alert(weeklyEarningReportsEl);
   if (typeof weeklyEarningReportsEl !== undefined && weeklyEarningReportsEl !== null) {
     const weeklyEarningReports = new ApexCharts(weeklyEarningReportsEl, weeklyEarningReportsConfig);
     weeklyEarningReports.render();
   }
-
+  });
   // Support Tracker - Radial Bar Chart
   // --------------------------------------------------------------------
   const supportTrackerEl = document.querySelector('#supportTracker'),
