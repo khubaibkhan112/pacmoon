@@ -109,6 +109,9 @@ async function save() {
     url: url,
     method: method,
     data: form.value,
+    headers: {
+    'Content-Type': 'multipart/form-data' // Set Content-Type header
+    }, 
   }).then(response => {
     const message = response.data.message;
     Swal.fire({
@@ -147,15 +150,20 @@ function resetValue() {
 }
 
 function handleFileChange(event) {
-            // Reset the array to ensure previous selections are cleared
-            this.form.media = [];
-            const files = event.target.files;
-            if (files) {
-                for (let i = 0; i < files.length; i++) {
-                    this.form.media.push(files[i]);
-                }
-            }
+  // Reset the array to ensure previous selections are cleared
+  form.value.media = [];
+  const files = event.target.files;
+  console.log(files);
+  if (files) {
+    for (let i = 0; i < files.length; i++) {
+      // Check if file is not empty and push it into the media array
+      if (files[i].size > 0) {
+        form.value.media.push(files[i]);
+      }
+    }
+  }
 }
+
 defineExpose({
   loadquestData
 });
