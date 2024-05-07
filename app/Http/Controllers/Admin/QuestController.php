@@ -53,11 +53,25 @@ class QuestController extends Controller
         $message = 'Error posting tweet';
         if($request->type=='tweet')
         {
-            
-            $response = $this->twitterService->postTweet($content);
+        
+            $files=[];
+            if($request->hasFile('media')){
+
+                // Iterate over each uploaded file
+                foreach ($request->file('media') as $file) {
+                    // Read the file contents and convert it to base64
+                    $base64 = base64_encode(file_get_contents($file->path()));
+                    
+                    // Append the base64 string to the files array
+                    $files[] = $base64;
+                }
+            }
+
+            $response = $this->twitterService->postTweet($content,$files);
             if($response['data'])
             {
                 $quest->content = $request->content;
+                $quest->tweet_id = $response['data']['id'];
                 $quest->save();
                 $message = 'Quest Added successfully';
             }else{
@@ -114,12 +128,21 @@ class QuestController extends Controller
      */
     public function destroy(string $id)
     {
-        $response = $this->twitterService->deleteTweet($id);
+        $quest =  Quest::find($id);
+        if($quest){
+           
+            if($quest->type=='tweet'){
+                $response = $this->twitterService->deleteTweet($id);
+                if (!$response['meta']['result'] == 'deleted') {                    
+                    return response()->json(['success' => false, 'message' => 'Error deleting tweet']);
+                }
+            }    
+            $quest->delete();
+            return response()->json(['success' => true, 'message' => 'Quest deleted successfully']);
+        } 
+        else{
+            return response()->json(['success' => false, 'message' => 'Error deleting Quest']);
+        }  
 
-        if ($response['meta']['result'] == 'deleted') {
-            return response()->json(['success' => true, 'message' => 'Tweet deleted successfully']);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Error deleting tweet']);
-        }
     }
 }
