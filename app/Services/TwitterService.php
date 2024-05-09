@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Carbon\Carbon;
 
 class TwitterService
 {
     protected $client;
+    protected $postclient;
     protected $apiKey;
     protected $apiSecret;
     protected $accessToken;
@@ -31,7 +33,27 @@ class TwitterService
                 'Accept' => 'application/json'
             ]
         ]);
+
+
+        $stack = \GuzzleHttp\HandlerStack::create();
+
+        // Set up the OAuth 1.0a middleware
+        $middleware = new Oauth1([
+            'consumer_key'    => $this->apiKey,
+            'consumer_secret' => $this->apiSecret,
+            'token'           => $this->accessToken,
+            'token_secret'    => $this->accessTokenSecret
+        ]);
+    
+        $stack->push($middleware);
+        $this->postclient = new \GuzzleHttp\Client([
+            'base_uri' => 'https://api.twitter.com',
+            'handler' => $stack,
+            'auth' => 'oauth'
+        ]);
     }
+
+
 
     // public function postTweet($status)
     // {
@@ -45,7 +67,7 @@ class TwitterService
 
     public function postTweet($tweetText, $filePaths = [])
     {
-        $response = $this->client->post('/2/tweets', [
+        $response = $this->postclient->post('/2/tweets', [
             'json' => [
                 'text' => $tweetText
             ]
@@ -62,7 +84,7 @@ class TwitterService
 
     public function deleteTweet($tweetId)
     {
-        $response = $this->client->delete("/2/tweets/{$tweetId}");
+        $response = $this->postclient->delete("/2/tweets/{$tweetId}");
 
         return json_decode($response->getBody(), true);
     }

@@ -30,14 +30,14 @@
                 </div>
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
               </div>
-              <div class="col-12 fv-plugins-icon-container my-2">
+              <!-- <div class="col-12 fv-plugins-icon-container my-2">
                 <div class="form-group">
                   <div class="w-100">
                     <input type="file" name="media[]" accept="image/*,video/*" multiple class="form-control" v-on:change="handleFileChange">
                   </div>
                 </div>
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-              </div>
+              </div> -->
             </div>
             <div class="row" v-else>
               <div class="col-12 fv-plugins-icon-container">
