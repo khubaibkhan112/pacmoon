@@ -48,7 +48,8 @@ function isQuestLiked($id, $quest_id): bool
     
         $pointsService = new TwitterService();
         $data = $pointsService->getUserLikedTweets($id);
-        {
+        dd($data);
+        if(isset($data['data'])){
             foreach ($data['data'] as $tweet) {
                 if ($tweet['id']== $quest_id){
                     return true;
