@@ -84,7 +84,7 @@ class TwitterService
 
     public function deleteTweet($tweetId)
     {
-        $response = $this->client->delete("/2/tweets/{$tweetId}");
+        $response = $this->postclient->delete("/2/tweets/{$tweetId}");
 
         return json_decode($response->getBody(), true);
     }
