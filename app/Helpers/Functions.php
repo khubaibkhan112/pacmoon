@@ -75,11 +75,10 @@ function getUserTweets($user_id)
     $user_tweets_data = new TwitterService();
     $user_tweets_data = $user_tweets_data->getTweets($user_id);
     $filteredTweets = [];
-    // dd($user_tweets_data);
+    dd($user_tweets_data);
     foreach ($user_tweets_data['data'] as $tweet) {
         $mentions =isset($tweet['entities']) && isset($tweet['entities']['mentions']) ? $tweet['entities']['mentions'] : [];
         $tags = $tweet['text'];
-
         $mentionedMingoApps = false;
         foreach ($mentions as $mention) {
             if (isset($mention['username']) && $mention['username'] === 'mingoapps') {

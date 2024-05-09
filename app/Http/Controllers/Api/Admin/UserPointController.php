@@ -201,6 +201,7 @@ class UserPointController extends Controller
         $quest_id = $request->quest_id;
         $points_slug = "points_for_following";
         $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
+        $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $id])->delete();
         $user_points = UserPoint::create([
             'user_id' => $user_id,
             'point_id' => $point->id,
@@ -218,16 +219,21 @@ class UserPointController extends Controller
         $user_id = auth()->user()->twitter_id;
         $pointsService = new TwitterService();
         $retweeted_by = $pointsService->getReteweets($id);
-        if (isset($retweeted_by['data']) && is_array($retweeted_by['data'])) {
+        $is_tweeted=false;
+        if (isset($retweeted_by['data'])) {
             // Use array_filter to filter the array based on id
+
             $filtered_retweets = array_filter($retweeted_by['data'], function ($retweet) use ($user_id) {
-                return $retweet['id'] === $user_id;
+                // dd($retweet['id'],$user_id);
+                return $retweet['id'] == $user_id;
             });
 
+            // dd($filtered_retweets);
             // Check if there are any elements in the filtered array
             if (!empty($filtered_retweets)) {
                 $points_slug = "points_for_quest_retweet";
                 $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
+                $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $id])->delete();
                 $user_points = UserPoint::create([
                     'user_id' => $user_id,
                     'point_id' => $point->id,
@@ -238,7 +244,7 @@ class UserPointController extends Controller
                     'message' => 'Points added successfully',
                     "quest_id" => $id,
                     "points" => $point->points,
-                ], 400);
+                ], 200);
             }
         }
 
@@ -260,21 +266,23 @@ class UserPointController extends Controller
         // $isQuestLiked = new TwitterService();
         $retweeted_by = isQuestLiked($user_id, $id);
         if ($retweeted_by) {
+            $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $id])->delete();
             $user_points = UserPoint::create([
                 'user_id' => $user_id,
                 'point_id' => $point->id,
+                'quest_id' => $id,
                 'user_points' => $point->points
             ]);
             return response()->json([
                 "points" => $point->points,
                 "quest_id" => $id,
                 'message' => 'Points added successfully'
-            ], 201);
+            ], 200);
         } else {
             return response()->json([
                 "quest_id" => $id,
                 'message' => 'Quest is not liked'
-            ], 201);
+            ], 400);
         }
     }
 }

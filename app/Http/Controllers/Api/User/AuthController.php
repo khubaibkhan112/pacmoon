@@ -67,12 +67,20 @@ class AuthController extends Controller
         }
         // app('App\Http\Controllers\Api\Admin\HomeController')->syncUserInformation($request , $user->twitter_id);
         $pointData = UserPoint::with('point')->where('user_id',$user->twitter_id)->get();
+        $total_points =  $users = User::select('id', 'twitter_id', 'name','profile_img')
+        ->withSum('points', 'user_points')
+        ->where('twitter_id',$user->twitter_id)
+        
+        ->orderByDesc('points_sum_user_points')
+        ->first();
+        
         // dd($pointData);
         $user_points = isset($pointData) ?  new PointApiResource($pointData) :  [];
     // dd($pointData);
         return response()->json([
             "user"=>$user,
             'points'=>$user_points,
+            "total_points"=>$total_points->points_sum_user_points ?? 0,
             'token' => $user->createToken(\Str::random(20))->plainTextToken
 
         ],200);
