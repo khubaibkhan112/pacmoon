@@ -133,7 +133,7 @@ class QuestController extends Controller
            
             if($quest->type=='tweet'){
                 $response = $this->twitterService->deleteTweet($id);
-                if (!$response['meta']['result'] == 'deleted') {                    
+                if (!isset($response['data']) || $response['data']['deleted'] !== true) {                    
                     return response()->json(['success' => false, 'message' => 'Error deleting tweet']);
                 }
             }    
