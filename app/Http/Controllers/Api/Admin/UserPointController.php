@@ -172,7 +172,7 @@ class UserPointController extends Controller
                     'accountFollows' => function ($q) use ($twitter_id) {
                         $q->where('user_id', $twitter_id);
                     }
-                ])->get();
+                ])->orderBy('id','DESC')->get();
 
         $groupedData = $quests->groupBy('type');
 
