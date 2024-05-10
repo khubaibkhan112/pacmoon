@@ -34,6 +34,7 @@ class QuestResource extends ResourceCollection
                     'type' => $item['type'],
                     'account_followed' => $item['account_follows_count'] ? true : false,
                     'created_at' => $item['created_at'],
+                    'profile_img' => $item['profile_url'] ?? '',
                     'updated_at' => $item['updated_at'],
                 ];
             }
