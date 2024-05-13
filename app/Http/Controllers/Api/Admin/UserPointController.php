@@ -213,7 +213,7 @@ class UserPointController extends Controller
          }
             if( !$is_tweeted && isset($continous_token) && $reweet_users){
                 usleep(400000);
-                $is_tweeted = $this->getRetweetsUserContinous($id,$continous_token,$user_id);
+                $is_tweeted = $this->getRetweetsUserContinous($user_id,$continous_token,$id);
             }
             if ($is_tweeted) {
                 // dd($is_tweeted,'hr');
@@ -262,7 +262,8 @@ class UserPointController extends Controller
     function addFollowPoints(Request $request)
     {
         $user_id = auth()->user()->twitter_id;
-        //  $user_id = "1774872213683863552";
+        // $user_id = "882699945207377921";
+
         $followers=  ($this->getFollowers($user_id));
         $user_name = $request->user_name;
         $is_followed=false;
@@ -280,10 +281,11 @@ class UserPointController extends Controller
             
             if($parts[0] != 0 && !$is_followed && isset($continous_token) && $results){
                 usleep(400000);
-                $is_followed = $this->getFollowerscontinous($user_id,$user_name,$continous_token);
+                $is_followed = $this->getFollowerscontinous($user_id,$continous_token,$user_name);
             }
 
         if($is_followed){
+            // dd($is_followed,'$is_followed');
             $quest_id = $request->quest_id;
             $points_slug = "points_for_following";
             $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
@@ -373,13 +375,8 @@ class UserPointController extends Controller
     public function getFollowerscontinous($user_id, $token = null, $user_name)
     {
         // Fetch followers with continuation token
-        $backoffTime = Cache::get('twitter_api_backoff_time', 0);
-
-    // If backoff time is in the future, sleep until then
-        if ($backoffTime > time()) {
-            sleep($backoffTime - time());
-        }
         $followers = $this->getFollowers($user_id, $token);
+        // dd($followers['results'],$token);
         // Check if the followers array is present
         if (!isset($followers['results'])) {
             // Return false if no followers found
@@ -423,7 +420,7 @@ class UserPointController extends Controller
         // If continuation token is present and user is not found yet, recursively call the function
         if(isset($continous_token) && $reweet_users){
                 usleep(400000);
-                $is_tweeted = $this->getRetweetsUserContinous($id,$continous_token,$user_id);
+                $is_tweeted = $this->getRetweetsUserContinous($user_id,$continous_token,$tweet_id);
         }
 
         // Return false if no more followers to fetch and user is not found
