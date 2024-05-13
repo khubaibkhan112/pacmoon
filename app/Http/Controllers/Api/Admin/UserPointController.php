@@ -11,7 +11,8 @@ use App\Models\UserPoint;
 use App\Models\User;
 use App\Models\Quest;
 use App\Services\TwitterService;
-
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 class UserPointController extends Controller
 {
     public function getlikeData(Request $request)
@@ -195,42 +196,27 @@ class UserPointController extends Controller
             ],
         ], 200);
     }
-    function addFollowPoints(Request $request)
-    {
-        $user_id = auth()->user()->twitter_id;
-        $quest_id = $request->quest_id;
-        $points_slug = "points_for_following";
-        $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
-        $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $id])->delete();
-        $user_points = UserPoint::create([
-            'user_id' => $user_id,
-            'point_id' => $point->id,
-            'quest_id' => $quest_id,
-            'user_points' => $point->points
-        ]);
-        return response()->json([
-            "points" => $point->points,
-            'message' => 'Points added successfully'
-        ], 201);
-
-    }
     public function addRetweetPoints($id)
     {
         $user_id = auth()->user()->twitter_id;
-        $pointsService = new TwitterService();
-        $retweeted_by = $pointsService->getReteweets($id);
+        $reweet_users=$this->getRetweetsUser($id);
+        // return $reweet_users;
+         $continuation_token = $reweet_users['continuation_token'];
+         $reweet_users=$reweet_users['retweets'];
+         //882699945207377921
         $is_tweeted=false;
-        if (isset($retweeted_by['data'])) {
-            // Use array_filter to filter the array based on id
-
-            $filtered_retweets = array_filter($retweeted_by['data'], function ($retweet) use ($user_id) {
-                // dd($retweet['id'],$user_id);
-                return $retweet['id'] == $user_id;
-            });
-
-            // dd($filtered_retweets);
-            // Check if there are any elements in the filtered array
-            if (!empty($filtered_retweets)) {
+         foreach($reweet_users as $user){
+             if($user['user_id']==$user_id){
+                 $is_tweeted=true;
+                 break;
+             }
+         }
+            if( !$is_tweeted && isset($continous_token) && $reweet_users){
+                usleep(400000);
+                $is_tweeted = $this->getRetweetsUserContinous($id,$continous_token,$user_id);
+            }
+            if ($is_tweeted) {
+                // dd($is_tweeted,'hr');
                 $points_slug = "points_for_quest_retweet";
                 $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
                 $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $id])->delete();
@@ -246,7 +232,7 @@ class UserPointController extends Controller
                     "points" => $point->points,
                 ], 200);
             }
-        }
+        // }
 
         // If $user_id not found in the retweeted_by data, do something else
         // For example, return false
@@ -254,18 +240,12 @@ class UserPointController extends Controller
             'message' => 'Tweet not reposted',
             "quest_id" => $id
         ], 400);
-
-
     }
     public function addQuestLikedpoints($id)
     {
         $user_id = auth()->user()->twitter_id;
-
         $points_slug = "liked_a_quest";
         $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
-        // $isQuestLiked = new TwitterService();
-        $retweeted_by = isQuestLiked($user_id, $id);
-        if ($retweeted_by) {
             $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $id])->delete();
             $user_points = UserPoint::create([
                 'user_id' => $user_id,
@@ -278,11 +258,176 @@ class UserPointController extends Controller
                 "quest_id" => $id,
                 'message' => 'Points added successfully'
             ], 200);
-        } else {
+    }
+    function addFollowPoints(Request $request)
+    {
+        $user_id = auth()->user()->twitter_id;
+        //  $user_id = "1774872213683863552";
+        $followers=  ($this->getFollowers($user_id));
+        $user_name = $request->user_name;
+        $is_followed=false;
+        $results=$followers['results'];
+        $continous_token=$followers['continuation_token'];
+        $parts = explode('|', $continous_token);
+        foreach($results as $follow){
+    //   if($follow['username'] == 'mingoapps')  dd($follow['username']);
+                if($follow['username']== $user_name){
+                    $is_followed=true;
+                    break;
+                } 
+        }
+        
+            
+            if($parts[0] != 0 && !$is_followed && isset($continous_token) && $results){
+                usleep(400000);
+                $is_followed = $this->getFollowerscontinous($user_id,$user_name,$continous_token);
+            }
+
+        if($is_followed){
+            $quest_id = $request->quest_id;
+            $points_slug = "points_for_following";
+            $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
+            $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $quest_id])->delete();
+            $user_points = UserPoint::create([
+                'user_id' => $user_id,
+                'point_id' => $point->id,
+                'quest_id' => $quest_id,
+                'user_points' => $point->points
+            ]);
             return response()->json([
-                "quest_id" => $id,
-                'message' => 'Quest is not liked'
+                "points" => $point->points,
+                'message' => 'Points added successfully'
+            ], 201);
+        }else{
+            return response()->json([
+                "points" => 0,
+                'message' => 'Account Not Followed'
             ], 400);
         }
+
     }
+    public function getFollowers($user_id,$token=null){
+        if($token){
+            
+            $response = Http::withHeaders([
+                'X-RapidAPI-Key' => '4bade4371fmsh5c418e469add4f2p1bdb09jsn509941cc0fc5',
+                'X-RapidAPI-Host' => 'twitter154.p.rapidapi.com',
+            ])->get('https://twitter154.p.rapidapi.com/user/following/continuation', [
+                'user_id' => $user_id,
+                'continuation_token'=>$token,
+                "limit"=>100
+            ]);
+        }else{
+            $response = Http::withHeaders([
+                'X-RapidAPI-Key' => '4bade4371fmsh5c418e469add4f2p1bdb09jsn509941cc0fc5',
+                'X-RapidAPI-Host' => 'twitter154.p.rapidapi.com',
+            ])->get('https://twitter154.p.rapidapi.com/user/following', [
+                'user_id' => $user_id,
+                "limit"=>100
+            ]);
+            
+        }
+         if ($response->successful()) {
+            // Get the response body
+            $data = $response->json();
+
+            // Return the fetched tweets
+            return $data;
+        } else {
+            // Handle the error
+            dd($response);
+        }
+    }
+    public function getRetweetsUser($tweet_id,$token=null){
+        if($token){
+            
+            $response = Http::withHeaders([
+                'X-RapidAPI-Key' => '4bade4371fmsh5c418e469add4f2p1bdb09jsn509941cc0fc5',
+                'X-RapidAPI-Host' => 'twitter154.p.rapidapi.com',
+            ])->get('https://twitter154.p.rapidapi.com/tweet/retweets/continuation', [
+                'tweet_id' => $tweet_id,
+                'continuation_token'=>$token,
+                "limit"=>40
+            ]);
+        }else{
+            $response = Http::withHeaders([
+                'X-RapidAPI-Key' => '4bade4371fmsh5c418e469add4f2p1bdb09jsn509941cc0fc5',
+                'X-RapidAPI-Host' => 'twitter154.p.rapidapi.com',
+            ])->get('https://twitter154.p.rapidapi.com/tweet/retweets', [
+                'tweet_id' => $tweet_id,
+                "limit"=>40
+            ]);
+            
+        }
+         if ($response->successful()) {
+            // Get the response body
+            $data = $response->json();
+
+            // Return the fetched tweets
+            return $data;
+        } else {
+            // Handle the error
+            dd($response);
+        }
+    }
+    public function getFollowerscontinous($user_id, $token = null, $user_name)
+    {
+        // Fetch followers with continuation token
+        $backoffTime = Cache::get('twitter_api_backoff_time', 0);
+
+    // If backoff time is in the future, sleep until then
+        if ($backoffTime > time()) {
+            sleep($backoffTime - time());
+        }
+        $followers = $this->getFollowers($user_id, $token);
+        // Check if the followers array is present
+        if (!isset($followers['results'])) {
+            // Return false if no followers found
+            return false;
+        }
+
+        // Extract results and continuation token from the response
+        $results = $followers['results'];
+        $continuation_token = $followers['continuation_token'];
+
+        // Check if the user is followed in the current batch of followers
+        foreach ($results as $follow) {
+            if ($follow['username'] == $user_name) {
+                // Return true if user is followed
+                return true;
+            }
+        }
+        $parts = explode('|',  $continuation_token);
+        // If continuation token is present and user is not found yet, recursively call the function
+        if (isset($continuation_token) && $parts[0] != 0 && isset($results) ) {
+            usleep(400000);
+            return $this->getFollowerscontinous($user_id, $continuation_token, $user_name);
+        }
+
+        // Return false if no more followers to fetch and user is not found
+        return false;
+    }
+    public function getRetweetsUserContinous($user_id, $token = null, $tweet_id)
+    {
+     $reweet_users=$this->getRetweetsUser($tweet_id,$token);
+        // return $reweet_users;
+         $continuation_token = $reweet_users['continuation_token'];
+         $reweet_users=$reweet_users['retweets'];
+         //882699945207377921
+         foreach($reweet_users as $user){
+             if($user['user_id']==$user_id){
+                return true;
+             }
+         }
+        
+        // If continuation token is present and user is not found yet, recursively call the function
+        if(isset($continous_token) && $reweet_users){
+                usleep(400000);
+                $is_tweeted = $this->getRetweetsUserContinous($id,$continous_token,$user_id);
+        }
+
+        // Return false if no more followers to fetch and user is not found
+        return false;
+    }
+
 }
