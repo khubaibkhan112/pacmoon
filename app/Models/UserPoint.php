@@ -44,13 +44,13 @@ class UserPoint extends Model
         if(count($data)) $user_points_row=self::insert($data);
 
     }
-    public function addMetricPoints($data,$tweet_ids,$user_id)  {
+    public function addMetricPoints($data,$tweet_ids,$user_ids)  {
         $points=Point::whereIn('slug',['points_for_like','points_for_retweets','points_for_views'])->get()->toArray();
         $pointsIds = [];
         foreach ($points as $point) {
             $pointsIds[] = $point['id'];
         }
-        $deletePoints=self::where('user_id',$user_id)->whereIn('point_id',$pointsIds)->whereIn('tweet_id',$tweet_ids)->delete();
+        $deletePoints=self::whereIn('user_id',$user_ids)->whereIn('point_id',$pointsIds)->whereIn('tweet_id',$tweet_ids)->delete();
         $points_data=[];
         // dd($points,$data);
         foreach($points as $point){
