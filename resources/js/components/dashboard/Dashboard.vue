@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-truck ti-md"></i></span>
+                        <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-users ti-md"></i></span>
                     </div>
                     <h4 class="ms-1 mb-0">{{ users_count }}</h4>
                     </div>
@@ -33,7 +33,7 @@
                     <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
                         <span class="avatar-initial rounded bg-label-warning"
-                        ><i class="ti ti-alert-triangle ti-md"></i
+                        ><i class="ti ti-shield-question ti-md"></i
                         ></span>
                     </div>
                     <h4 class="ms-1 mb-0">{{ quests }}</h4>
@@ -48,7 +48,7 @@
                     <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
                         <span class="avatar-initial rounded bg-label-danger"
-                        ><i class="ti ti-git-fork ti-md"></i
+                        ><i class="ti ti-thumb-up ti-md"></i
                         ></span>
                     </div>
                     <h4 class="ms-1 mb-0">{{ tweetts_like_count }}</h4>
@@ -62,7 +62,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-info"><i class="ti ti-clock ti-md"></i></span>
+                        <span class="avatar-initial rounded bg-label-info"><i class="ti ti-sort-0-9 ti-md"></i></span>
                     </div>
                     <h4 class="ms-1 mb-0">{{ mentions_count }}</h4>
                     </div>

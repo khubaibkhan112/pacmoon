@@ -56,7 +56,7 @@ class PointController extends Controller
 
             $points->save();
             DB::commit();
-            return response()->json(['message' => 'Points added successfully'], 201);
+            return response()->json(['success' => true, 'message' => 'Points added successfully'], 201);
         } catch (\Exception $exception) {
             DB::rollback();
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -102,12 +102,13 @@ class PointController extends Controller
             $points->save();
             DB::commit();
             return response()->json([
+                'success' => true,
                 'message' => 'Points Updated successfully',
                 'data' => $points,
             ], 201);
         } catch (\Exception $exception) {
             DB::rollback();
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $exception->getMessage()], 500);
         }
     }
 
