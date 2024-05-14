@@ -1,6 +1,6 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
   <div class="app-brand demo">
-    <a href="index.html" class="app-brand-link">
+    <a href="{{url('/')}}" class="app-brand-link">
       <span class="app-brand-logo demo">
         <img src="https://pbs.twimg.com/profile_images/1469866962645880834/-uD_orAt_normal.jpg" class="rounded-full" alt="mingo" height="22" width="32" >
       </span>

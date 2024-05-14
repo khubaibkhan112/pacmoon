@@ -241,24 +241,7 @@ class UserPointController extends Controller
             "quest_id" => $id
         ], 400);
     }
-    public function addQuestLikedpoints($id)
-    {
-        $user_id = auth()->user()->twitter_id;
-        $points_slug = "liked_a_quest";
-        $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
-            $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $id])->delete();
-            $user_points = UserPoint::create([
-                'user_id' => $user_id,
-                'point_id' => $point->id,
-                'quest_id' => $id,
-                'user_points' => $point->points
-            ]);
-            return response()->json([
-                "points" => $point->points,
-                "quest_id" => $id,
-                'message' => 'Points added successfully'
-            ], 200);
-    }
+    
     function addFollowPoints(Request $request)
     {
         $user_id = auth()->user()->twitter_id;
@@ -421,6 +404,104 @@ class UserPointController extends Controller
         if(isset($continous_token) && $reweet_users){
                 usleep(400000);
                 $is_tweeted = $this->getRetweetsUserContinous($user_id,$continous_token,$tweet_id);
+        }
+
+        // Return false if no more followers to fetch and user is not found
+        return false;
+    }
+    public function addQuestLikedpoints($id)
+    {
+        $user_id = auth()->user()->twitter_id;
+        $tweets=$this->getUserLikes($user_id);
+        // return $reweet_users;
+         $continuation_token = $tweets['continuation_token'];
+         $tweets=$tweets['results'];
+         //882699945207377921
+         $is_quest_liked=false;
+         foreach($tweets as $tweet){
+             if($tweet['tweet_id']==$id){
+                $is_quest_liked=true;
+                break;
+             }
+         }
+        
+        // If continuation token is present and user is not found yet, recursively call the function
+        if( !$is_quest_liked && $tweets){
+                usleep(400000);
+                $is_quest_liked = $this->getUserLikesContinous($user_id,$continuation_token,$id);
+        }
+        
+            if($is_quest_liked){
+                // dd('liked',$is_quest_liked);
+                    $points_slug = "liked_a_quest";
+                $point = Point::select('id', 'points')->where('slug', $points_slug)->first();
+                $lastpoint = UserPoint::where(['user_id' => $user_id,'point_id' => $point->id,'quest_id' => $id])->delete();
+                $user_points = UserPoint::create([
+                    'user_id' => $user_id,
+                    'point_id' => $point->id,
+                    'quest_id' => $id,
+                    'user_points' => $point->points
+                ]);
+                return response()->json([
+                    "points" => $point->points,
+                    "quest_id" => $id,
+                    'message' => 'Points added successfully'
+                ], 200);
+            }
+            return response()->json([
+            'message' => 'Tweet not Liked',
+            "quest_id" => $id
+        ], 400);
+    }
+    public function getUserLikes($user_id,$token=null){
+        if($token){
+            
+            $response = Http::withHeaders([
+                'X-RapidAPI-Key' => '4bade4371fmsh5c418e469add4f2p1bdb09jsn509941cc0fc5',
+                'X-RapidAPI-Host' => 'twitter154.p.rapidapi.com',
+            ])->get('https://twitter154.p.rapidapi.com/user/likes/continuation', [
+                'user_id' => $user_id,
+                'continuation_token'=>$token,
+                "limit"=>100
+            ]);
+        }else{
+            $response = Http::withHeaders([
+                'X-RapidAPI-Key' => '4bade4371fmsh5c418e469add4f2p1bdb09jsn509941cc0fc5',
+                'X-RapidAPI-Host' => 'twitter154.p.rapidapi.com',
+            ])->get('https://twitter154.p.rapidapi.com/user/likes/continuation', [
+                'user_id' => $user_id,
+                "limit"=>100
+            ]);
+            
+        }
+         if ($response->successful()) {
+            // Get the response body
+            $data = $response->json();
+
+            // Return the fetched tweets
+            return $data;
+        } else {
+            // Handle the error
+            dd($response);
+        }
+    }
+     public function getUserLikesContinous($user_id, $token = null, $tweet_id)
+    {
+        $tweets=$this->getUserLikes($user_id,$token);
+        // return $reweet_users;
+         $continuation_token = $tweets['continuation_token'];
+         $tweets=$tweets['results'];
+         //882699945207377921
+         foreach($tweets as $tweet){
+             if($tweet['tweet_id']==$tweet_id){
+                return true;
+             }
+         }
+        
+        // If continuation token is present and user is not found yet, recursively call the function
+        if(isset($continous_token) && $tweets){
+                usleep(400000);
+                $is_tweeted = $this->getUserLikesContinous($user_id,$continous_token,$tweet_id);
         }
 
         // Return false if no more followers to fetch and user is not found
