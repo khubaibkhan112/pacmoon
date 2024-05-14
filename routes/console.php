@@ -2,9 +2,10 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\UpdateUserPoints;
+
 // Artisan::command('schedule:run', function (Schedule $schedule) {
 //     $schedule->command('queue:work --stop-when-empty')->hourly()
 //         ->before(function () {
@@ -15,6 +16,5 @@ use App\Jobs\UpdateUserPoints;
 //         });
 //     Log::info('Schedule run executed at: ' . now());
 // })->purpose('Run the scheduler');
-$sch= new Schedule;   
-$sch->job(new UpdateUserPoints)->hourly();
+Schedule::job(new UpdateUserPoints)->everyTwentySeconds();
 
