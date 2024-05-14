@@ -134,7 +134,7 @@
                         <tbody>
 
                           <tr v-for="(obj, index) in leaderboard" :key="index">
-                            <td>{{ getOrdinal(index + 1) }}</td>
+                            <td></td>
                             <td>
                               <div class="d-flex justify-content-start align-items-center">
                                 <div class="me-1">

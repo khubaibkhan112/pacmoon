@@ -126,7 +126,21 @@ class TwitterService
             // 2/tweets/:id/retweeted_by
             $response = $this->client->get('/2/tweets/'. $id .'/retweeted_by');
             return json_decode($response->getBody(), true);
-    }
-
+        }
+        public function getMingoMentions(){
+            $user_id="715568461662011393";
+            $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
+            $endDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
+            $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}`);
+            return json_decode($response->getBody(), true);
+        }
+        public function getMingoLikedTweets(){
+            $user_id="715568461662011393";
+            $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
+            $endDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
+            // $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}`);
+            $response = $this->client->get('/2/users/'.$user_id.'/liked_tweets?start_time='. $startOfDay .'&end_time='.$endDay);
+            return json_decode($response->getBody(), true);
+        }
 
 }

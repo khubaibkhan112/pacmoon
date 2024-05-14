@@ -20,8 +20,6 @@ class UserPointController extends Controller
         try {
             // $user = User::where("id",$request->id)->first();
             $user_id = auth()->user()->twitter_id;
-
-
             $syncuser = SyncUserLikesData($user_id);
 
 
@@ -355,7 +353,7 @@ class UserPointController extends Controller
             dd($response);
         }
     }
-    public function getFollowerscontinous($user_id, $token = null, $user_name)
+    public function getFollowerscontinous($user_id, $token = null, $user_name,$token_count=0)
     {
         // Fetch followers with continuation token
         $followers = $this->getFollowers($user_id, $token);
@@ -378,16 +376,17 @@ class UserPointController extends Controller
             }
         }
         $parts = explode('|',  $continuation_token);
+        $token_count++;
         // If continuation token is present and user is not found yet, recursively call the function
-        if (isset($continuation_token) && $parts[0] != 0 && isset($results) ) {
+        if (isset($continuation_token) && $parts[0] != 0 && isset($results) && $token_count <= 3 ) {
             usleep(400000);
-            return $this->getFollowerscontinous($user_id, $continuation_token, $user_name);
+            return $this->getFollowerscontinous($user_id, $continuation_token, $user_name,$token_count);
         }
 
         // Return false if no more followers to fetch and user is not found
         return false;
     }
-    public function getRetweetsUserContinous($user_id, $token = null, $tweet_id)
+    public function getRetweetsUserContinous($user_id, $token = null, $tweet_id,$token_count=0)
     {
      $reweet_users=$this->getRetweetsUser($tweet_id,$token);
         // return $reweet_users;
@@ -399,11 +398,33 @@ class UserPointController extends Controller
                 return true;
              }
          }
-        
+         $token_count++;
         // If continuation token is present and user is not found yet, recursively call the function
-        if(isset($continous_token) && $reweet_users){
+        if(isset($continous_token) && $reweet_users && $token_count <= 3){
                 usleep(400000);
-                $is_tweeted = $this->getRetweetsUserContinous($user_id,$continous_token,$tweet_id);
+                $is_tweeted = $this->getRetweetsUserContinous($user_id,$continous_token,$tweet_id,$token_count);
+        }
+
+        // Return false if no more followers to fetch and user is not found
+        return false;
+    }
+    public function getUserLikesContinous($user_id, $token = null, $tweet_id,$token_count=0)
+    {
+        $tweets=$this->getUserLikes($user_id,$token);
+        // return $reweet_users;
+         $continuation_token = $tweets['continuation_token'];
+         $tweets=$tweets['results'];
+         //882699945207377921
+         foreach($tweets as $tweet){
+             if($tweet['tweet_id']==$tweet_id){
+                return true;
+             }
+         }
+        $token_count++;
+        // If continuation token is present and user is not found yet, recursively call the function
+        if(isset($continous_token) && $tweets && $token_count <= 3){
+                usleep(400000);
+                $is_tweeted = $this->getUserLikesContinous($user_id,$continous_token,$tweet_id,$token_count);
         }
 
         // Return false if no more followers to fetch and user is not found
@@ -485,27 +506,6 @@ class UserPointController extends Controller
             dd($response);
         }
     }
-     public function getUserLikesContinous($user_id, $token = null, $tweet_id)
-    {
-        $tweets=$this->getUserLikes($user_id,$token);
-        // return $reweet_users;
-         $continuation_token = $tweets['continuation_token'];
-         $tweets=$tweets['results'];
-         //882699945207377921
-         foreach($tweets as $tweet){
-             if($tweet['tweet_id']==$tweet_id){
-                return true;
-             }
-         }
-        
-        // If continuation token is present and user is not found yet, recursively call the function
-        if(isset($continous_token) && $tweets){
-                usleep(400000);
-                $is_tweeted = $this->getUserLikesContinous($user_id,$continous_token,$tweet_id);
-        }
-
-        // Return false if no more followers to fetch and user is not found
-        return false;
-    }
+     
 
 }
