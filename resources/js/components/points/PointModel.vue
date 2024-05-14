@@ -18,7 +18,7 @@
               </div>
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
             </div>
-            <div class="col-12 fv-plugins-icon-container">
+            <!-- <div class="col-12 fv-plugins-icon-container">
               <div class="form-group">
                 <label class="mb-0">Description:</label>
                 <div class="w-100">
@@ -27,7 +27,7 @@
                 </div>
               </div>
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-            </div>
+            </div> -->
             <div class="col-12 text-center">
               <button type="submit" class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">{{ isEditMode ? 'Update' : 'Submit' }}</button>
               <button type="reset" class="btn btn-label-secondary waves-effect" @click="close" aria-label="Close">
@@ -43,6 +43,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import Swal from 'sweetalert2';
 const form = ref({
   points: "",
   note: "",
@@ -78,6 +79,12 @@ async function save() {
     method: method,
     data: form.value,
   }).then(response => {
+    const message = response.data.message;
+    Swal.fire({
+        icon: 'success',
+        title: message,
+        showConfirmButton: true
+    });
     emit('pointsList');
     close();
   }).catch(error => {

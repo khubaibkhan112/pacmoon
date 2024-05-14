@@ -22,6 +22,7 @@
                 <th class="text-nowrap text-center">Type</th>
                 <th class="text-nowrap text-center" >Tweet ID</th>
                 <th class="text-nowrap text-center">User Name</th>
+                <th class="text-nowrap text-center">Content</th>
                 <th class="text-nowrap text-center">Action</th>
               </tr>
             </thead>
@@ -32,6 +33,7 @@
                 <td class="text-center" v-if="obj.type === 'follow'">Follow an Account</td>
                 <td class="text-center">{{ obj.tweet_id ?? '-' }}</td>
                 <td class="text-center">{{ obj.account ?? '-' }}</td>
+                <td class="text-center">{{ obj.content && obj.content.length > 25 ? obj.content.slice(0, 25) + '...' : (obj.content || '-') }}</td>
                 <td class="text-center">
                     <!-- <a class="cursor-quester" data-toggle="modal" data-target="#questsModel" @click="openModal(obj.id)"><i class="ti ti-pencil me-1 text-info"></i></a> -->
                     <a class="cursor-quester" @click="deleteData(obj.id)"><i class="ti ti-trash me-1 text-danger"></i></a>
