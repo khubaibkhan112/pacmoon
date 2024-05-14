@@ -131,11 +131,12 @@ class TwitterService
         $user_id="715568461662011393";
         $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
         $endDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
-        $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}`);
+        $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}&tweet.fields=id,text,edit_history_tweet_ids,author_id,public_metrics`);
         return json_decode($response->getBody(), true);
     }
     public function getMingoLikedTweets(){
-        $user_id="715568461662011393";
+        // $user_id="715568461662011393";
+        $user_id="1519637376410206208";
         $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
         $endDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
         // $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}`);
