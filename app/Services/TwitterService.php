@@ -44,7 +44,7 @@ class TwitterService
             'token'           => $this->accessToken,
             'token_secret'    => $this->accessTokenSecret
         ]);
-    
+
         $stack->push($middleware);
         $this->postclient = new \GuzzleHttp\Client([
             'base_uri' => 'https://api.twitter.com',
@@ -127,20 +127,20 @@ class TwitterService
             $response = $this->client->get('/2/tweets/'. $id .'/retweeted_by');
             return json_decode($response->getBody(), true);
         }
-        public function getMingoMentions(){
-            $user_id="715568461662011393";
-            $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
-            $endDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
-            $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}`);
-            return json_decode($response->getBody(), true);
-        }
-        public function getMingoLikedTweets(){
-            $user_id="715568461662011393";
-            $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
-            $endDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
-            // $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}`);
-            $response = $this->client->get('/2/users/'.$user_id.'/liked_tweets?start_time='. $startOfDay .'&end_time='.$endDay);
-            return json_decode($response->getBody(), true);
-        }
+    public function getMingoMentions(){
+        $user_id="715568461662011393";
+        $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
+        $endDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
+        $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}`);
+        return json_decode($response->getBody(), true);
+    }
+    public function getMingoLikedTweets(){
+        $user_id="715568461662011393";
+        $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
+        $endDay = Carbon::now()->startOfDay()->format('Y-m-d\TH:i:s\Z');
+        // $response = $this->client->get(`/2/users/{$user_id}/mentions?start_time={ $startOfDay }&end_time={$endDay}`);
+        $response = $this->client->get('/2/users/'.$user_id.'/liked_tweets?start_time='. $startOfDay .'&end_time='.$endDay);
+        return json_decode($response->getBody(), true);
+    }
 
 }
