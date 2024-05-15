@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PointController;
 use App\Http\Controllers\Admin\QuestController;
+use App\Http\Controllers\Api\Admin\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +25,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/twitter_acc', [ProfileController::class, 'twitterrAcc']);
+Route::get('/testqeue', [HomeController::class, 'testjob']);
 
 require __DIR__ . '/auth.php';
