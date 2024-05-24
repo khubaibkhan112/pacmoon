@@ -16,5 +16,5 @@ use App\Jobs\UpdateUserPoints;
 //         });
 //     Log::info('Schedule run executed at: ' . now());
 // })->purpose('Run the scheduler');
-Schedule::job(new UpdateUserPoints)->hourly();
+Schedule::job(new UpdateUserPoints)->everyFifteenMinutes();
 

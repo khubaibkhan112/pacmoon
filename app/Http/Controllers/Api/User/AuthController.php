@@ -80,9 +80,8 @@ class AuthController extends Controller
         return response()->json([
             "user"=>$user,
             'points'=>$user_points,
-            "total_points"=>$total_points->points_sum_user_points ?? 0,
+            'total_points'=>$total_points->points_sum_user_points ?? 0,
             'token' => $user->createToken(\Str::random(20))->plainTextToken
-
         ],200);
     }
 }

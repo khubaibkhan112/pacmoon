@@ -184,8 +184,8 @@ class UserPointController extends Controller
         $tweets = $renamedData->get('tweet');
         $follows = $renamedData->get('follow');
         //  dd($quests->get());
-        $tweets = new QuestResource($tweets);
-        $follows = new QuestResource($follows);
+        $tweets = $tweets ? new QuestResource($tweets) : [];
+        $follows = $follows ? new QuestResource($follows) : [];
         return response()->json([
             'status' => 'success',
             'quests' => [
@@ -353,6 +353,52 @@ class UserPointController extends Controller
             dd($response);
         }
     }
+    public function getTweetLikes($tweet_id,$token=null){
+        if($token){
+            
+            $response = Http::withHeaders([
+                'X-RapidAPI-Key' => '4bade4371fmsh5c418e469add4f2p1bdb09jsn509941cc0fc5',
+                'X-RapidAPI-Host' => 'twitter154.p.rapidapi.com',
+            ])->get('https://twitter154.p.rapidapi.com/tweet/favoriters/continuation', [
+                'tweet_id' => $tweet_id,
+                'continuation_token'=>$token,
+                "limit"=>100
+            ]);
+        }else{
+            $response = Http::withHeaders([
+                'X-RapidAPI-Key' => '4bade4371fmsh5c418e469add4f2p1bdb09jsn509941cc0fc5',
+                'X-RapidAPI-Host' => 'twitter154.p.rapidapi.com',
+            ])->get('https://twitter154.p.rapidapi.com/tweet/favoriters', [
+                'tweet_id' => $tweet_id,
+                "limit"=>100
+            ]);
+            
+        }
+         if ($response->successful()) {
+            // Get the response body
+            $data = $response->json();
+
+            // Return the fetched tweets
+            return $data;
+        } else {
+            // Handle the error
+            dd($response);
+        }
+    }
+    public function isTweetLiked($tweet_id,$token=null){
+        // favoriters
+        $data = $this->getTweetLikes($tweet_id);
+        if(isset($data['favoriters'])){
+            foreach($data['favoriters'] as $user){
+                if($user['user_id']==auth()->user()->twitter_id){
+                   return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
     public function getFollowerscontinous($user_id, $token = null, $user_name,$token_count=0)
     {
         // Fetch followers with continuation token
@@ -376,7 +422,7 @@ class UserPointController extends Controller
             }
         }
         $parts = explode('|',  $continuation_token);
-        $token_count++;
+        // $token_count++;
         // If continuation token is present and user is not found yet, recursively call the function
         if (isset($continuation_token) && $parts[0] != 0 && isset($results) && $token_count <= 3 ) {
             usleep(400000);
@@ -420,7 +466,7 @@ class UserPointController extends Controller
                 return true;
              }
          }
-        $token_count++;
+        // $token_count++;
         // If continuation token is present and user is not found yet, recursively call the function
         if(isset($continous_token) && $tweets && $token_count <= 3){
                 usleep(400000);
@@ -445,7 +491,9 @@ class UserPointController extends Controller
                 break;
              }
          }
-        
+        if(!$is_quest_liked){
+            $is_quest_liked = $this->isTweetLiked($id);
+        }        
         // If continuation token is present and user is not found yet, recursively call the function
         if( !$is_quest_liked && $tweets){
                 usleep(400000);

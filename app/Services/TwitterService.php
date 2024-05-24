@@ -134,7 +134,8 @@ class TwitterService
     public function getMingoMentions()
     {
         // try {
-            $user_id = "715568461662011393";
+            // $user_id = "715568461662011393" //mingo Id;
+            $user_id = "1398173485575323649"; //Crypto_tej ID;
             $startOfDay = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i:s\Z');
             $endDay = Carbon::now()->endOfDay()->format('Y-m-d\TH:i:s\Z');
             // $startOfDay = "2024-04-18T00:00:01Z";
@@ -152,7 +153,8 @@ class TwitterService
 
         // try {
             
-            $user_id="715568461662011393";
+           // $user_id = "715568461662011393" //mingo Id;
+            $user_id = "1398173485575323649"; //Crypto_tej ID;
             // $user_id = "1519637376410206208";
             // Start of the day in UTC
             $startOfDay = Carbon::now()->subDay()->startOfDay()->format('Y-m-d\TH:i:s\Z'); // Adjust as needed to be in the past
